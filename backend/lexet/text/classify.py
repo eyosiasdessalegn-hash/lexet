@@ -2,6 +2,7 @@
 from __future__ import annotations
 
 import json
+import os
 import re
 from dataclasses import dataclass
 from functools import lru_cache
@@ -36,10 +37,20 @@ def max_status(*statuses: str | None) -> str | None:
 _DEFAULT_TAXONOMY = Path(__file__).resolve().parents[3] / "shared" / "taxonomy.json"
 
 
+def taxonomy_file() -> Path:
+    """LEXET_TAXONOMY if set; else shared/taxonomy.json in the source tree or the working directory."""
+    env = os.environ.get("LEXET_TAXONOMY")
+    if env:
+        return Path(env)
+    for p in (_DEFAULT_TAXONOMY, Path.cwd() / "shared" / "taxonomy.json", Path.cwd().parent / "shared" / "taxonomy.json"):
+        if p.exists():
+            return p
+    raise FileNotFoundError("shared/taxonomy.json not found; set LEXET_TAXONOMY to its path")
+
+
 @lru_cache(maxsize=4)
 def load_taxonomy(path: str | None = None) -> dict:
-    p = Path(path) if path else _DEFAULT_TAXONOMY
-    with open(p, encoding="utf-8") as f:
+    with open(Path(path) if path else taxonomy_file(), encoding="utf-8") as f:
         return json.load(f)
 
 
