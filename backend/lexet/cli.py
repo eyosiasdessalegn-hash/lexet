@@ -5,8 +5,10 @@ import argparse
 import asyncio
 import json
 import logging
+import os
 import sys
 import time
+import traceback
 from pathlib import Path
 
 from . import static_feed
@@ -56,7 +58,22 @@ def cmd_export(args, settings):
                       "segments": len(index["segments"])}))
 
 
+def _gh(kind: str, title: str, text: str):
+    """GitHub Actions annotation (shown on the run page; readable through the API)."""
+    if os.environ.get("GITHUB_ACTIONS") == "true":
+        body = text[-30000:].replace("%", "%25").replace("\r", "").replace("\n", "%0A")
+        print(f"::{kind} title={title}::{body}", flush=True)
+
+
 def cmd_publish(args, settings):
+    try:
+        _publish(args, settings)
+    except Exception:
+        _gh("error", "lexet publish failed", traceback.format_exc())
+        raise
+
+
+def _publish(args, settings):
     """One scheduled run: crawl the sources that are due, verify, then export the feed.
 
     Push is not sent here (the files are not live yet); `lexet tickle` sends it
@@ -82,8 +99,13 @@ def cmd_publish(args, settings):
     if args.report:
         Path(args.report).write_text(json.dumps(summary, indent=2, default=str), encoding="utf-8")
     print(json.dumps({k: v for k, v in summary.items() if k != "crawled"}))
+    lines = []
     for sid, r in sorted(report.crawled.items()):
         print(f"  {sid:<16} {json.dumps(r, default=str)}")
+        lines.append(f"{sid}: new={r.get('new', 0)} candidates={r.get('candidates', 0)} requests={r.get('requests', 0)}"
+                     f" robots={r.get('robots', '')}" + (f" ERROR {r['error'][:160]}" if r.get("error") else ""))
+    _gh("notice", f"v{summary['version']} · {summary['items']} items · {summary['events']} events",
+        "\n".join(lines) or "no source was due")
 
 
 def cmd_tickle(args, settings):
