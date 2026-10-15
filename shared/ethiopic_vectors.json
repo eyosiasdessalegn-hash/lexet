@@ -1,0 +1,252 @@
+{
+ "description": "Ethiopic normalisation vectors shared by the backend (Python) and the Android domain module (Kotlin). Regenerate with backend/scripts/gen_vectors.py and review by eye.",
+ "vectors": [
+  {
+   "input": "ሥልጣን",
+   "normalized": "ስልጣን",
+   "index_tokens": [
+    "ስልጣን"
+   ]
+  },
+  {
+   "input": "ስልጣን",
+   "normalized": "ስልጣን",
+   "index_tokens": [
+    "ስልጣን"
+   ]
+  },
+  {
+   "input": "አፀደቀ",
+   "normalized": "አጸደቀ",
+   "index_tokens": [
+    "አጸደቀ"
+   ]
+  },
+  {
+   "input": "አጸደቀ",
+   "normalized": "አጸደቀ",
+   "index_tokens": [
+    "አጸደቀ"
+   ]
+  },
+  {
+   "input": "ሐምሌ",
+   "normalized": "ሀምሌ",
+   "index_tokens": [
+    "ሀምሌ"
+   ]
+  },
+  {
+   "input": "ኀይል",
+   "normalized": "ሀይል",
+   "index_tokens": [
+    "ሀይል"
+   ]
+  },
+  {
+   "input": "ኃይል",
+   "normalized": "ሀይል",
+   "index_tokens": [
+    "ሀይል"
+   ]
+  },
+  {
+   "input": "ሃይል",
+   "normalized": "ሀይል",
+   "index_tokens": [
+    "ሀይል"
+   ]
+  },
+  {
+   "input": "ዓመት",
+   "normalized": "አመት",
+   "index_tokens": [
+    "አመት"
+   ]
+  },
+  {
+   "input": "ዐዋጅ",
+   "normalized": "አዋጅ",
+   "index_tokens": [
+    "አዋጅ"
+   ]
+  },
+  {
+   "input": "የመረጃ ነፃነት አዋጅ",
+   "normalized": "የመረጃ ነጻነት አዋጅ",
+   "index_tokens": [
+    "የመረጃ",
+    "መረጃ",
+    "ነጻነት",
+    "አዋጅ"
+   ]
+  },
+  {
+   "input": "የመረጃ፡ነጻነት፡አዋጅ።",
+   "normalized": "የመረጃ ነጻነት አዋጅ",
+   "index_tokens": [
+    "የመረጃ",
+    "መረጃ",
+    "ነጻነት",
+    "አዋጅ"
+   ]
+  },
+  {
+   "input": "ለኢንቨስትመንት",
+   "normalized": "ለኢንቨስትመንት",
+   "index_tokens": [
+    "ለኢንቨስትመንት",
+    "ኢንቨስትመንት"
+   ]
+  },
+  {
+   "input": "እንደሚከተለው",
+   "normalized": "እንደሚከተለው",
+   "index_tokens": [
+    "እንደሚከተለው",
+    "ሚከተለው"
+   ]
+  },
+  {
+   "input": "ከአዲስ አበባ",
+   "normalized": "ከአዲስ አበባ",
+   "index_tokens": [
+    "ከአዲስ",
+    "አዲስ",
+    "አበባ"
+   ]
+  },
+  {
+   "input": "አዋጅ ቁጥር ፲፬፻፳፯/፳፻፲፰",
+   "normalized": "አዋጅ ቁጥር 1427 2018",
+   "index_tokens": [
+    "አዋጅ",
+    "ቁጥር",
+    "1427",
+    "2018"
+   ]
+  },
+  {
+   "input": "Proclamation No. 1427/2026",
+   "normalized": "proclamation no 1427 2026",
+   "index_tokens": [
+    "proclamation",
+    "no",
+    "1427",
+    "2026"
+   ]
+  },
+  {
+   "input": "FREEDOM of Information",
+   "normalized": "freedom of information",
+   "index_tokens": [
+    "freedom",
+    "of",
+    "information"
+   ]
+  },
+  {
+   "input": "ሰኔ ፲፰ ቀን ፳፻፲፰ ዓ.ም",
+   "normalized": "ሰኔ 18 ቀን 2018 አ ም",
+   "index_tokens": [
+    "ሰኔ",
+    "18",
+    "ቀን",
+    "2018",
+    "አ",
+    "ም"
+   ]
+  },
+  {
+   "input": "ፍትሕ ሚኒስቴር",
+   "normalized": "ፍትህ ሚኒስቴር",
+   "index_tokens": [
+    "ፍትህ",
+    "ሚኒስቴር"
+   ]
+  },
+  {
+   "input": "ፍትህ ሚኒስቴር",
+   "normalized": "ፍትህ ሚኒስቴር",
+   "index_tokens": [
+    "ፍትህ",
+    "ሚኒስቴር"
+   ]
+  },
+  {
+   "input": "ሕግ",
+   "normalized": "ህግ",
+   "index_tokens": [
+    "ህግ"
+   ]
+  },
+  {
+   "input": "ህግ",
+   "normalized": "ህግ",
+   "index_tokens": [
+    "ህግ"
+   ]
+  },
+  {
+   "input": "ጸሐፊ",
+   "normalized": "ጸሀፊ",
+   "index_tokens": [
+    "ጸሀፊ"
+   ]
+  },
+  {
+   "input": "ፀሀፊ",
+   "normalized": "ጸሀፊ",
+   "index_tokens": [
+    "ጸሀፊ"
+   ]
+  },
+  {
+   "input": "አዋጅ ቍጥር ፩ሺ",
+   "normalized": "አዋጅ ቁጥር 1ሺ",
+   "index_tokens": [
+    "አዋጅ",
+    "ቁጥር",
+    "1ሺ"
+   ]
+  },
+  {
+   "input": "ምክር‍ቤት",
+   "normalized": "ምክርቤት",
+   "index_tokens": [
+    "ምክርቤት"
+   ]
+  },
+  {
+   "input": "የ",
+   "normalized": "የ",
+   "index_tokens": [
+    "የ"
+   ]
+  },
+  {
+   "input": "በር",
+   "normalized": "በር",
+   "index_tokens": [
+    "በር"
+   ]
+  },
+  {
+   "input": "Café Société",
+   "normalized": "café société",
+   "index_tokens": [
+    "café",
+    "société"
+   ]
+  },
+  {
+   "input": "ፌዴራል ነጋሪት ጋዜጣ",
+   "normalized": "ፌዴራል ነጋሪት ጋዜጣ",
+   "index_tokens": [
+    "ፌዴራል",
+    "ነጋሪት",
+    "ጋዜጣ"
+   ]
+  }
+ ]
+}

@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Navigation -->
+    <string name="nav_feed">ዜናዎች</string>
+    <string name="nav_search">ፍለጋ</string>
+    <string name="nav_saved">የተቀመጡ</string>
+    <string name="nav_reports">ሪፖርቶች</string>
+    <string name="nav_settings">ቅንብሮች</string>
+
+    <!-- Actions -->
+    <string name="action_add_tag">መለያ አክል</string>
+    <string name="action_allow">ፍቀድ</string>
+    <string name="action_back">ተመለስ</string>
+    <string name="action_bookmark">ዕልባት አድርግ</string>
+    <string name="action_cancel">ይቅር</string>
+    <string name="action_clear">አጽዳ</string>
+    <string name="action_delete">ሰርዝ</string>
+    <string name="action_export_pdf">PDF አውጣ</string>
+    <string name="action_filters">ማጣሪያዎች</string>
+    <string name="action_load_more">ተጨማሪ ጫን</string>
+    <string name="action_mark_all_read">ሁሉንም እንደተነበበ ምልክት አድርግ</string>
+    <string name="action_mark_read">እንደተነበበ ምልክት አድርግ</string>
+    <string name="action_mark_unread">እንዳልተነበበ ምልክት አድርግ</string>
+    <string name="action_not_now">አሁን አይደለም</string>
+    <string name="action_open_pdf">PDF ክፈት</string>
+    <string name="action_open_source">ምንጩን ክፈት</string>
+    <string name="action_refresh">አድስ</string>
+    <string name="action_remove_bookmark">ዕልባት አስወግድ</string>
+    <string name="action_remove_tag">መለያ አስወግድ</string>
+    <string name="action_reset">ዳግም አስጀምር</string>
+    <string name="action_save">አስቀምጥ</string>
+    <string name="action_save_pdf">ወደ መሣሪያ አስቀምጥ</string>
+    <string name="action_share">አጋራ</string>
+    <string name="action_sync_now">አሁን አመሳስል</string>
+
+    <!-- Badges and labels -->
+    <string name="badge_international">ዓለም አቀፍ</string>
+    <string name="badge_official">ይፋዊ</string>
+    <string name="badge_unconfirmed">ያልተረጋገጠ</string>
+    <string name="badge_verified">የተረጋገጠ</string>
+    <string name="label_international">ዓለም አቀፍ</string>
+    <string name="tier_agency">ይፋዊ የዜና ወኪል</string>
+    <string name="tier_international">ዓለም አቀፍ</string>
+    <string name="tier_official">ይፋዊ</string>
+    <string name="tier_press">ገለልተኛ ፕሬስ</string>
+
+    <!-- Notification channels -->
+    <string name="channel_in_force">በሥራ ላይ የዋሉ ሕጎች</string>
+    <string name="channel_in_force_desc">በፌዴራል ነጋሪት ጋዜጣ ታትመው ሥራ ላይ የዋሉ ሕጎች</string>
+    <string name="channel_imminent">ሊወጡ የተቃረቡ ሕጎች</string>
+    <string name="channel_imminent_desc">በምክር ቤቱ ወይም በሚኒስትሮች ምክር ቤት የጸደቁ፣ በጋዜጣ የሚጠበቁ</string>
+    <string name="channel_upcoming">ረቂቆችና የቀረቡ ሕጎች</string>
+    <string name="channel_upcoming_desc">ረቂቅ አዋጆች፣ ለምክር ቤቱ የቀረቡ ሕጎችና የፖሊሲ ጅምሮች</string>
+    <string name="channel_digest">ማጠቃለያ</string>
+    <string name="channel_digest_desc">የተረጋገጡ ለውጦች በሰዓት ወይም በቀን ማጠቃለያ</string>
+    <string name="channel_reports">ሪፖርቶች</string>
+    <string name="channel_reports_desc">ሳምንታዊ፣ ወርሃዊና ዓመታዊ ማጠናከሪያዎች ሲዘጋጁ</string>
+    <string name="channel_sync">የዳራ ማመሳሰል</string>
+    <string name="channel_sync_desc">አስቸኳይ ማመሳሰል ሲካሄድ ለአጭር ጊዜ ይታያል</string>
+    <string name="notif_public_title">አዲስ የተረጋገጠ የሕግ ለውጥ</string>
+    <string name="digest_more">+%1$d ተጨማሪ</string>
+    <string name="report_ready_title">ማጠናከሪያ ተዘጋጅቷል</string>
+    <string name="syncing">በማመሳሰል ላይ…</string>
+
+    <!-- Feed -->
+    <string name="feed_empty_title">እስካሁን ምንም የለም</string>
+    <string name="feed_empty_body">መተግበሪያው ከአገልጋዩ ጋር ሲመሳሰል አዳዲስ የሕግ ለውጦች እዚህ ይታያሉ።</string>
+    <string name="feed_setup_title">የLexET ምንጭዎን ይምረጡ</string>
+    <string name="feed_setup_body">LexET የተረጋገጡ የሕግ መረጃዎችን የሚያገኘው ከLexET ምንጭ ነው። የምንጩን አድራሻ በቅንብሮች › አገልጋይ ውስጥ ያስገቡ፤ ለምሳሌ yourname.github.io/lexet</string>
+    <string name="feed_no_server_title">ከአገልጋዩ ጋር መገናኘት አልተቻለም</string>
+    <string name="feed_no_server_body">በ%1$s የLexET ምንጭ ማግኘት አልተቻለም። በቅንብሮች › አገልጋይ ያለውን አድራሻ እና የኢንተርኔት ግንኙነትዎን ያረጋግጡ።</string>
+    <string name="perm_title">ማሳወቂያዎችን ይፍቀዱ</string>
+    <string name="perm_body">አዳዲስ የተረጋገጡ አዋጆች፣ ደንቦችና መመሪያዎች ሲወጡ በመቆለፊያ ማያ ገጹ ላይም ጭምር እንዲያውቁ። የትኞቹ እንደሚያሳውቁ በቅንብሮች ውስጥ ይምረጡ።</string>
+    <string name="sync_never">ገና አልተመሳሰለም</string>
+    <string name="sync_just_now">አሁን ተዘምኗል</string>
+    <string name="sync_minutes_ago">ከ%1$d ደቂቃ በፊት ተዘምኗል</string>
+    <string name="sync_hours_ago">ከ%1$d ሰዓት በፊት ተዘምኗል</string>
+    <string name="sync_offline">ከመስመር ውጭ — መረብ ሲመለስ ያመሳስላል</string>
+
+    <!-- Search and filters -->
+    <string name="search_hint">አዋጅ፣ ቁጥር፣ ርዕስ…  ለምሳሌ፦ 1427/2018</string>
+    <string name="search_empty_title">ውጤት የለም</string>
+    <string name="search_empty_body">ሌላ ቃል ይሞክሩ ወይም ማጣሪያዎችን ያስወግዱ። ፍለጋው የፊደል ልዩነቶችን (ሠ/ሰ፣ ፀ/ጸ፣ ሐ/ሀ) እንደ አንድ ይቆጥራል።</string>
+    <string name="filter_all">ሁሉም</string>
+    <string name="filter_any_body">ማንኛውም አካል</string>
+    <string name="filter_bookmarked">ዕልባቶች</string>
+    <string name="filter_ethiopia">ኢትዮጵያ</string>
+    <string name="filter_issuer">አውጪ አካል</string>
+    <string name="filter_jurisdiction">አድማስ</string>
+    <string name="filter_mine">የእኔ</string>
+    <string name="filter_period">ጊዜ</string>
+    <string name="filter_stage">ደረጃ</string>
+    <string name="filter_topic">ርዕሰ ጉዳይ</string>
+    <string name="filter_type">የሰነድ ዓይነት</string>
+    <string name="filter_unread">ያልተነበቡ</string>
+    <string name="filter_verification">ማረጋገጫ</string>
+    <string name="period_any">ማንኛውም ጊዜ</string>
+    <string name="period_week">ያለፉት 7 ቀናት</string>
+    <string name="period_month">ያለፉት 30 ቀናት</string>
+    <string name="period_year">ያለፈው ዓመት</string>
+
+    <!-- Detail -->
+    <string name="section_summary">ማጠቃለያ</string>
+    <string name="section_facts">ዝርዝሮች</string>
+    <string name="section_tags">መለያዎችና ማስታወሻ</string>
+    <string name="section_sources">ምንጮች</string>
+    <string name="fact_issuer">አውጪ አካል</string>
+    <string name="fact_initiator">አመንጪ</string>
+    <string name="fact_status">ሁኔታ</string>
+    <string name="fact_first_reported">መጀመሪያ የተዘገበው</string>
+    <string name="fact_status_date">ሁኔታው ከ</string>
+    <string name="fact_amends">የሚያሻሽለው</string>
+    <string name="no_amharic_title">የአማርኛ ርዕስ ገና አልታተመም</string>
+    <string name="no_english_title">የእንግሊዝኛ ርዕስ ገና አልታተመም</string>
+    <string name="note_empty">የግል ማስታወሻ ለማከል ይንኩ</string>
+    <string name="note_title">ማስታወሻ</string>
+    <string name="reported_later_stage">አንድ ምንጭ ቀጣይ ደረጃ (%1$s) ዘግቧል። ሲረጋገጥ እዚህ ይታያል።</string>
+    <string name="sources_explainer">እያንዳንዱ አሳታሚ አንድ ጊዜ ብቻ ይቆጠራል። ከሌላ ምንጭ የተቀዱ ዘገባዎች አይቆጠሩም።</string>
+    <string name="source_counted">ተቆጥሯል</string>
+    <string name="source_not_counted">አልተቆጠረም፦ %1$s</string>
+    <string name="source_gazette">የነጋሪት ጋዜጣ ሕትመት</string>
+
+    <!-- Saved -->
+    <string name="saved_empty_title">ምንም የተቀመጠ የለም</string>
+    <string name="saved_empty_body">ሕጎችን ዕልባት ያድርጉ ወይም መለያ ይስጡ፤ እዚህ ይሰበሰባሉ።</string>
+
+    <!-- Reports -->
+    <string name="reports_intro">የአዳዲስ የኢትዮጵያ ሕግ ሰነዶች ሳምንታዊ፣ ወርሃዊና ዓመታዊ ማጠናከሪያዎች በራስ-ሰር ይዘጋጃሉ። በመተግበሪያው ውስጥ ያንብቡ ወይም ማውጫና የምንጭ ማጣቀሻ ያለው PDF ያውጡ።</string>
+    <string name="reports_compile">አዘጋጅ</string>
+    <string name="reports_current">የአሁኑ</string>
+    <string name="reports_previous">ያለፈው</string>
+    <string name="reports_saved">የተዘጋጁ PDFዎች</string>
+    <string name="reports_none">እስካሁን የተዘጋጀ PDF የለም።</string>
+    <string name="kind_week">ሳምንታዊ</string>
+    <string name="kind_month">ወርሃዊ</string>
+    <string name="kind_year">ዓመታዊ</string>
+    <string name="no_pdf_viewer">PDF የሚከፍት መተግበሪያ አልተገኘም</string>
+    <string name="saved_to_device">ወደ መሣሪያው ተቀምጧል</string>
+
+    <!-- PDF / report text -->
+    <string name="pdf_title">የኢትዮጵያ የሕግ ለውጦች ማጠናከሪያ</string>
+    <string name="pdf_range">ከ%1$s እስከ %2$s</string>
+    <string name="pdf_generated">የተዘጋጀው፦ %1$s</string>
+    <string name="pdf_totals_heading">በአጭሩ</string>
+    <string name="pdf_totals">አዳዲስ ሰነዶች፦ %1$d · የሁኔታ ለውጦች፦ %2$d · የተረጋገጡ፦ %3$d · ያልተረጋገጡ፦ %4$d</string>
+    <string name="pdf_verification_note">«የተረጋገጠ» ማለት ቢያንስ ሦስት ገለልተኛ አሳታሚዎች የዘገቡት ሲሆን ከነዚህም አንዱ ይፋዊ የመንግሥት ሕትመት ወይም የኢትዮጵያ ዜና አገልግሎት (ኢዜአ) ነው። ከሌላ ምንጭ የተቀዱ ዘገባዎች አይቆጠሩም። ያልተረጋገጡ ሰነዶችም ተካተዋል፤ ምልክትም ተደርጎባቸዋል።</string>
+    <string name="pdf_disclaimer">ከይፋዊና ከሕዝብ ምንጮች በራስ-ሰር የተጠናቀረ። የሕግ ምክር አይደለም፤ በማንኛውም ድንጋጌ ላይ ከመታመንዎ በፊት በፌዴራል ነጋሪት ጋዜጣ የታተመውን ይፋዊ ጽሑፍ ያረጋግጡ።</string>
+    <string name="pdf_empty">በዚህ ጊዜ ውስጥ የተመዘገበ አዲስ የኢትዮጵያ የሕግ ለውጥ የለም።</string>
+    <string name="pdf_contents">ማውጫ</string>
+    <string name="pdf_references">ማጣቀሻዎች</string>
+    <string name="pdf_issuer">አውጪ፦ %1$s</string>
+    <string name="pdf_status">ሁኔታ፦ %1$s</string>
+    <string name="pdf_status_change">በዚህ ጊዜ የሁኔታ ለውጥ — አሁን፦ %1$s</string>
+    <string name="pdf_first_reported">መጀመሪያ የተዘገበው፦ %1$s</string>
+    <string name="pdf_status_date">ሁኔታው ከ፦ %1$s</string>
+    <string name="pdf_verified">የተረጋገጠ — %1$d ገለልተኛ ምንጮች</string>
+    <string name="pdf_unconfirmed">ያልተረጋገጠ — እስካሁን %1$d ገለልተኛ ምንጭ</string>
+    <string name="pdf_sources">ምንጮች፦ %1$s</string>
+    <string name="pdf_page">ገጽ %1$d ከ%2$d</string>
+
+    <!-- Settings -->
+    <string name="set_notifications">ማሳወቂያዎች</string>
+    <string name="set_notify_verified">የተረጋገጡ የኢትዮጵያ ሕግ ለውጦች</string>
+    <string name="set_notify_verified_desc">ቢያንስ በሦስት ገለልተኛ ምንጮች ሲረጋገጡ ብቻ</string>
+    <string name="set_lock_screen">በመቆለፊያ ማያ ገጹ ላይ ዝርዝሩን አሳይ</string>
+    <string name="set_lock_screen_desc">ሲጠፋ የመቆለፊያ ማያ ገጹ «አዲስ የተረጋገጠ የሕግ ለውጥ» ብቻ ያሳያል</string>
+    <string name="set_digest">አላላክ</string>
+    <string name="digest_instant">ወዲያውኑ</string>
+    <string name="digest_hourly">በየሰዓቱ ማጠቃለያ</string>
+    <string name="digest_daily">በየቀኑ ማጠቃለያ (ከጠዋቱ 2 ሰዓት / 08:00)</string>
+    <string name="set_filter_types">የሰነድ ዓይነቶች</string>
+    <string name="set_filter_urgency">ደረጃ</string>
+    <string name="set_filter_topics">ርዕሰ ጉዳዮች</string>
+    <string name="set_filter_issuers">አውጪ አካላት</string>
+    <string name="set_filter_keywords">ቁልፍ ቃላት</string>
+    <string name="set_empty_means_all">ምንም ካልተመረጠ ሁሉም ያሳውቃሉ።</string>
+    <string name="set_none">የለም</string>
+    <string name="keywords_help">በእያንዳንዱ መስመር አንድ ቁልፍ ቃል፣ በአማርኛ ወይም በእንግሊዝኛ፤ ለምሳሌ፦ ማዕድን፣ tax፣ የግል መረጃ። ከቃላቱ አንዱ ከተገኘ ያሳውቃል።</string>
+    <string name="set_display">ማሳያ</string>
+    <string name="set_title_language">የርዕስ ቋንቋ</string>
+    <string name="lang_amharic_first">አማርኛ መጀመሪያ</string>
+    <string name="lang_english_first">እንግሊዝኛ መጀመሪያ</string>
+    <string name="set_ui_language_hint">የመተግበሪያውን ቋንቋ ለመቀየር የስልክዎን ቅንብሮች › መተግበሪያዎች › LexET › ቋንቋ ይጠቀሙ።</string>
+    <string name="set_dates">ቀናት</string>
+    <string name="dates_both">ሁለቱም</string>
+    <string name="dates_gregorian">ግሪጎሪያን (እ.ኤ.አ)</string>
+    <string name="dates_ethiopian">ኢትዮጵያ (ዓ.ም)</string>
+    <string name="set_theme">ገጽታ</string>
+    <string name="theme_system">እንደ ስልኩ</string>
+    <string name="theme_light">ብርሃን</string>
+    <string name="theme_dark">ጨለማ</string>
+    <string name="set_auto_reports">ማጠናከሪያዎችን በራስ-ሰር አዘጋጅ</string>
+    <string name="set_auto_reports_desc">በቀን አንድ ጊዜ፣ ሳምንት፣ ወር ወይም ዓመት ካለቀ</string>
+    <string name="set_notify_reports">ማጠናከሪያ ሲዘጋጅ አሳውቀኝ</string>
+    <string name="set_report_calendar">ለወርሃዊና ዓመታዊ ማጠናከሪያ የቀን አቆጣጠር</string>
+    <string name="set_sync">ማመሳሰልና ዳታ</string>
+    <string name="set_push">ፈጣን ፑሽ (Firebase)</string>
+    <string name="set_push_desc">ለውጥ ሲኖር አገልጋዩ መተግበሪያውን ያነቃል። ሲጠፋ ከታች በተመረጠው ድግግሞሽ ያረጋግጣል።</string>
+    <string name="set_push_unavailable">በዚህ ግንባታ ፑሽ አልተዋቀረም። መተግበሪያው ከታች በተመረጠው ድግግሞሽ እና መረብ ሲመለስ ወዲያውኑ ያመሳስላል።</string>
+    <string name="set_interval">የዳራ ማረጋገጫ ድግግሞሽ</string>
+    <string name="minutes_n">%1$d ደቂቃ</string>
+    <string name="hours_n">%1$d ሰዓት</string>
+    <string name="set_unmetered">በዳራ በWi-Fi ብቻ አመሳስል</string>
+    <string name="set_unmetered_desc">የሞባይል ዳታ ይቆጥባል። መተግበሪያው ሲከፈት ሁልጊዜ ያመሳስላል።</string>
+    <string name="set_last_sync">መጨረሻ የተመሳሰለው፦ %1$s</string>
+    <string name="set_last_error">የመጨረሻ ስህተት፦ %1$s</string>
+    <string name="set_sources_privacy">ምንጮችና ግላዊነት</string>
+    <string name="set_sources">የሚከታተሉ ምንጮች</string>
+    <string name="set_sources_desc">የምንጭ ደረጃዎችና የክትትል ሁኔታ</string>
+    <string name="set_server">አገልጋይ</string>
+    <string name="server_help">የLexET ምንጭዎ አድራሻ፤ ለምሳሌ yourname.github.io/lexet ወይም የአገልጋይዎ https አድራሻ። መቀየር በመሣሪያው ያለውን ማህደር ያጠፋና እንደገና ያወርዳል።</string>
+    <string name="server_not_set">አልተዘጋጀም</string>
+    <string name="privacy_text">ግላዊነት፦ መለያ አያስፈልግም፤ ስም፣ ኢሜል ወይም የመሣሪያ መለያ አይሰበሰብም። ማጣሪያዎች፣ ዕልባቶች፣ መለያዎችና ማስታወሻዎች በዚህ መሣሪያ ላይ ብቻ ይቀመጣሉ። አገልጋዩ የሚቀበለው የመጨረሻውን የማመሳሰያ ቁጥር ብቻ ነው። ፑሽ ሲበራ Google Firebase አንድ ስም-አልባ የርዕስ ምዝገባ ይጠቀማል።</string>
+    <string name="verification_rule_text">የማረጋገጫ ደንብ፦ አንድ የኢትዮጵያ ሕግ ለውጥ «የተረጋገጠ» የሚባለው ቢያንስ ሦስት ገለልተኛ አሳታሚዎች ሲዘግቡት ነው፤ ከነዚህም አንዱ ይፋዊ የመንግሥት ምንጭ (ነጋሪት ጋዜጣ፣ ሚኒስቴር፣ ምክር ቤት) ወይም ኢዜአ መሆን አለበት። ያልተረጋገጡ አይደበቁም፤ ምልክት ይደረግባቸዋል እንጂ ማሳወቂያ አይልኩም።</string>
+
+    <!-- Sources screen -->
+    <string name="sources_intro">አገልጋዩ የሚከታተላቸው ምንጮች፣ የምንጭ ደረጃቸው እና ጣቢያው ራስ-ሰር ክትትልን ይፈቅድ እንደሆነ።</string>
+    <string name="sources_error">ምንጮችን መጫን አልተቻለም፦ %1$s</string>
+    <string name="robots_allowed">በራስ-ሰር ይከታተላል</string>
+    <string name="robots_disallowed">ጣቢያው ራስ-ሰር ክትትልን አይፈቅድም — በአዘጋጆች ይገባል</string>
+    <string name="robots_unknown">ሁኔታው አልታወቀም</string>
+
+    <plurals name="source_count">
+        <item quantity="one">%d ምንጭ</item>
+        <item quantity="other">%d ምንጮች</item>
+    </plurals>
+    <plurals name="verified_by_sources">
+        <item quantity="one">በ%d ገለልተኛ ምንጭ የተረጋገጠ</item>
+        <item quantity="other">በ%d ገለልተኛ ምንጮች የተረጋገጠ</item>
+    </plurals>
+    <plurals name="result_count">
+        <item quantity="one">%d ውጤት</item>
+        <item quantity="other">%d ውጤቶች</item>
+    </plurals>
+    <plurals name="report_entries">
+        <item quantity="one">%d ሰነድ</item>
+        <item quantity="other">%d ሰነዶች</item>
+    </plurals>
+</resources>

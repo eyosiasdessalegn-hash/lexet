@@ -1,0 +1,22 @@
+# Run from the repository root:  docker compose -f backend/docker-compose.yml up --build
+services:
+  api:
+    build: { context: .., dockerfile: backend/Dockerfile }
+    command: ["lexet", "serve", "--port", "8080"]
+    ports: ["8080:8080"]
+    environment: &env
+      LEXET_DATABASE_URL: sqlite:////data/lexet.db
+      LEXET_USER_AGENT: "LexETBot/0.1 (+https://YOUR-DOMAIN/bot; contact: YOUR-EMAIL)"
+      LEXET_ADMIN_TOKEN: ${LEXET_ADMIN_TOKEN:-}
+      LEXET_FCM_PROJECT_ID: ${LEXET_FCM_PROJECT_ID:-}
+      LEXET_FCM_CREDENTIALS: ${LEXET_FCM_CREDENTIALS:-}
+    volumes: ["lexet-data:/data", "./secrets:/secrets:ro"]
+    restart: unless-stopped
+  worker:
+    build: { context: .., dockerfile: backend/Dockerfile }
+    command: ["lexet", "run", "--tick", "60"]
+    environment: *env
+    volumes: ["lexet-data:/data", "./secrets:/secrets:ro"]
+    restart: unless-stopped
+volumes:
+  lexet-data: {}

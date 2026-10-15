@@ -1,0 +1,31 @@
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+.venv/
+*.db
+*.db-wal
+*.db-shm
+backend/secrets/
+
+# Android / Gradle
+android/.gradle/
+android/build/
+android/*/build/
+android/local.properties
+android/.idea/
+*.iml
+.kotlin/
+captures/
+*.apk
+*.aab
+
+# OS
+.DS_Store
+
+# Secrets and generated feeds
+*.jks
+*.keystore
+state/
+site/

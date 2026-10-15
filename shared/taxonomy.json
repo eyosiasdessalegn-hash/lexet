@@ -1,0 +1,776 @@
+{
+  "version": 1,
+  "doc_types": [
+    {
+      "code": "proclamation",
+      "en": "Proclamation",
+      "am": "አዋጅ"
+    },
+    {
+      "code": "regulation",
+      "en": "Council of Ministers Regulation",
+      "am": "የሚኒስትሮች ምክር ቤት ደንብ"
+    },
+    {
+      "code": "directive",
+      "en": "Directive",
+      "am": "መመሪያ"
+    },
+    {
+      "code": "draft_bill",
+      "en": "Draft bill",
+      "am": "ረቂቅ ሕግ"
+    },
+    {
+      "code": "policy",
+      "en": "Policy",
+      "am": "ፖሊሲ"
+    },
+    {
+      "code": "notice",
+      "en": "Official notice / gazette",
+      "am": "ማስታወቂያ / ጋዜጣ"
+    },
+    {
+      "code": "other",
+      "en": "Other",
+      "am": "ሌላ"
+    }
+  ],
+  "statuses": [
+    {
+      "code": "policy_signal",
+      "rank": 0,
+      "urgency": "upcoming",
+      "en": "Policy initiative",
+      "am": "የፖሊሲ ጅምር"
+    },
+    {
+      "code": "draft",
+      "rank": 1,
+      "urgency": "upcoming",
+      "en": "Draft",
+      "am": "ረቂቅ"
+    },
+    {
+      "code": "tabled",
+      "rank": 2,
+      "urgency": "upcoming",
+      "en": "Before parliament",
+      "am": "ለምክር ቤት የቀረበ"
+    },
+    {
+      "code": "approved",
+      "rank": 3,
+      "urgency": "imminent",
+      "en": "Approved, awaiting gazette",
+      "am": "የጸደቀ፣ በጋዜጣ የሚጠበቅ"
+    },
+    {
+      "code": "in_force",
+      "rank": 4,
+      "urgency": "in_force",
+      "en": "In force",
+      "am": "በሥራ ላይ ያለ"
+    },
+    {
+      "code": "amended",
+      "rank": 5,
+      "urgency": "in_force",
+      "en": "Amended",
+      "am": "የተሻሻለ"
+    },
+    {
+      "code": "repealed",
+      "rank": 6,
+      "urgency": "ended",
+      "en": "Repealed",
+      "am": "የተሻረ"
+    }
+  ],
+  "urgencies": [
+    {
+      "code": "upcoming",
+      "en": "Upcoming",
+      "am": "በሂደት ላይ"
+    },
+    {
+      "code": "imminent",
+      "en": "About to be released",
+      "am": "ሊወጣ የተቃረበ"
+    },
+    {
+      "code": "in_force",
+      "en": "Now in force",
+      "am": "በሥራ ላይ"
+    },
+    {
+      "code": "ended",
+      "en": "No longer in force",
+      "am": "ቀሪ የሆነ"
+    }
+  ],
+  "issuers": [
+    {
+      "code": "HPR",
+      "en": "House of Peoples' Representatives",
+      "am": "የሕዝብ ተወካዮች ምክር ቤት",
+      "patterns_en": [
+        "house of peoples' representatives",
+        "house of peoples representatives",
+        "house of people's representatives",
+        "hopr",
+        "parliament",
+        "lawmakers",
+        "the house"
+      ],
+      "patterns_am": [
+        "የሕዝብ ተወካዮች ምክር ቤት",
+        "የህዝብ ተወካዮች ምክር ቤት",
+        "ምክር ቤቱ"
+      ]
+    },
+    {
+      "code": "HOF",
+      "en": "House of Federation",
+      "am": "የፌዴሬሽን ምክር ቤት",
+      "patterns_en": [
+        "house of federation"
+      ],
+      "patterns_am": [
+        "የፌዴሬሽን ምክር ቤት"
+      ]
+    },
+    {
+      "code": "COM",
+      "en": "Council of Ministers",
+      "am": "የሚኒስትሮች ምክር ቤት",
+      "patterns_en": [
+        "council of ministers",
+        "cabinet"
+      ],
+      "patterns_am": [
+        "የሚኒስትሮች ምክር ቤት"
+      ]
+    },
+    {
+      "code": "PMO",
+      "en": "Office of the Prime Minister",
+      "am": "የጠቅላይ ሚኒስትር ጽሕፈት ቤት",
+      "patterns_en": [
+        "prime minister's office",
+        "office of the prime minister"
+      ],
+      "patterns_am": [
+        "የጠቅላይ ሚኒስትር ጽሕፈት ቤት"
+      ]
+    },
+    {
+      "code": "MOJ",
+      "en": "Ministry of Justice",
+      "am": "ፍትሕ ሚኒስቴር",
+      "patterns_en": [
+        "ministry of justice"
+      ],
+      "patterns_am": [
+        "ፍትሕ ሚኒስቴር",
+        "የፍትሕ ሚኒስቴር"
+      ]
+    },
+    {
+      "code": "MOF",
+      "en": "Ministry of Finance",
+      "am": "የገንዘብ ሚኒስቴር",
+      "patterns_en": [
+        "ministry of finance"
+      ],
+      "patterns_am": [
+        "የገንዘብ ሚኒስቴር"
+      ]
+    },
+    {
+      "code": "MOR",
+      "en": "Ministry of Revenues",
+      "am": "የገቢዎች ሚኒስቴር",
+      "patterns_en": [
+        "ministry of revenues",
+        "ministry of revenue"
+      ],
+      "patterns_am": [
+        "የገቢዎች ሚኒስቴር"
+      ]
+    },
+    {
+      "code": "MOTRI",
+      "en": "Ministry of Trade and Regional Integration",
+      "am": "የንግድና ቀጠናዊ ትስስር ሚኒስቴር",
+      "patterns_en": [
+        "ministry of trade and regional integration",
+        "ministry of trade"
+      ],
+      "patterns_am": [
+        "የንግድና ቀጠናዊ ትስስር ሚኒስቴር",
+        "የንግድ ሚኒስቴር"
+      ]
+    },
+    {
+      "code": "MOM",
+      "en": "Ministry of Mines",
+      "am": "የማዕድን ሚኒስቴር",
+      "patterns_en": [
+        "ministry of mines",
+        "ministry of mining"
+      ],
+      "patterns_am": [
+        "የማዕድን ሚኒስቴር"
+      ]
+    },
+    {
+      "code": "MOLS",
+      "en": "Ministry of Labour and Skills",
+      "am": "የሥራና ክህሎት ሚኒስቴር",
+      "patterns_en": [
+        "ministry of labour and skills",
+        "ministry of labor and skills"
+      ],
+      "patterns_am": [
+        "የሥራና ክህሎት ሚኒስቴር"
+      ]
+    },
+    {
+      "code": "MOH",
+      "en": "Ministry of Health",
+      "am": "የጤና ሚኒስቴር",
+      "patterns_en": [
+        "ministry of health"
+      ],
+      "patterns_am": [
+        "የጤና ሚኒስቴር"
+      ]
+    },
+    {
+      "code": "MINT",
+      "en": "Ministry of Innovation and Technology",
+      "am": "የኢኖቬሽንና ቴክኖሎጂ ሚኒስቴር",
+      "patterns_en": [
+        "ministry of innovation and technology"
+      ],
+      "patterns_am": [
+        "የኢኖቬሽንና ቴክኖሎጂ ሚኒስቴር"
+      ]
+    },
+    {
+      "code": "NBE",
+      "en": "National Bank of Ethiopia",
+      "am": "የኢትዮጵያ ብሔራዊ ባንክ",
+      "patterns_en": [
+        "national bank of ethiopia",
+        "central bank"
+      ],
+      "patterns_am": [
+        "የኢትዮጵያ ብሔራዊ ባንክ",
+        "ብሔራዊ ባንክ"
+      ]
+    },
+    {
+      "code": "ECC",
+      "en": "Ethiopian Customs Commission",
+      "am": "የኢትዮጵያ ጉምሩክ ኮሚሽን",
+      "patterns_en": [
+        "customs commission"
+      ],
+      "patterns_am": [
+        "ጉምሩክ ኮሚሽን"
+      ]
+    },
+    {
+      "code": "EIC",
+      "en": "Ethiopian Investment Commission",
+      "am": "የኢትዮጵያ ኢንቨስትመንት ኮሚሽን",
+      "patterns_en": [
+        "investment commission",
+        "investment board"
+      ],
+      "patterns_am": [
+        "ኢንቨስትመንት ኮሚሽን",
+        "ኢንቨስትመንት ቦርድ"
+      ]
+    },
+    {
+      "code": "EFDA",
+      "en": "Ethiopian Food and Drug Authority",
+      "am": "የኢትዮጵያ የምግብና መድኃኒት ባለሥልጣን",
+      "patterns_en": [
+        "food and drug authority",
+        "efda"
+      ],
+      "patterns_am": [
+        "የምግብና መድኃኒት ባለሥልጣን"
+      ]
+    },
+    {
+      "code": "EIPA",
+      "en": "Ethiopian Intellectual Property Authority",
+      "am": "የኢትዮጵያ አእምሯዊ ንብረት ባለሥልጣን",
+      "patterns_en": [
+        "intellectual property authority",
+        "eipa"
+      ],
+      "patterns_am": [
+        "አእምሯዊ ንብረት ባለሥልጣን"
+      ]
+    },
+    {
+      "code": "ECA",
+      "en": "Ethiopian Communications Authority",
+      "am": "የኢትዮጵያ ኮሙኒኬሽን ባለሥልጣን",
+      "patterns_en": [
+        "communications authority"
+      ],
+      "patterns_am": [
+        "ኮሙኒኬሽን ባለሥልጣን"
+      ]
+    },
+    {
+      "code": "ECMA",
+      "en": "Ethiopian Capital Market Authority",
+      "am": "የኢትዮጵያ ካፒታል ገበያ ባለሥልጣን",
+      "patterns_en": [
+        "capital market authority"
+      ],
+      "patterns_am": [
+        "ካፒታል ገበያ ባለሥልጣን"
+      ]
+    },
+    {
+      "code": "EPA",
+      "en": "Environmental Protection Authority",
+      "am": "የአካባቢ ጥበቃ ባለሥልጣን",
+      "patterns_en": [
+        "environmental protection authority"
+      ],
+      "patterns_am": [
+        "የአካባቢ ጥበቃ ባለሥልጣን"
+      ]
+    },
+    {
+      "code": "INSA",
+      "en": "Information Network Security Administration",
+      "am": "የኢንፎርሜሽን መረብ ደኅንነት አስተዳደር",
+      "patterns_en": [
+        "information network security administration",
+        "insa"
+      ],
+      "patterns_am": [
+        "የኢንፎርሜሽን መረብ ደኅንነት አስተዳደር",
+        "የኢንፎርሜሽን መረብ ደህንነት አስተዳደር"
+      ]
+    },
+    {
+      "code": "NEBE",
+      "en": "National Election Board of Ethiopia",
+      "am": "የኢትዮጵያ ብሔራዊ ምርጫ ቦርድ",
+      "patterns_en": [
+        "national election board",
+        "nebe"
+      ],
+      "patterns_am": [
+        "ብሔራዊ ምርጫ ቦርድ"
+      ]
+    },
+    {
+      "code": "OTHER",
+      "en": "Other body",
+      "am": "ሌላ ተቋም",
+      "patterns_en": [],
+      "patterns_am": []
+    }
+  ],
+  "topics": [
+    {
+      "code": "mining",
+      "en": "Mining & minerals",
+      "am": "ማዕድን",
+      "kw_en": [
+        "mining",
+        "mineral",
+        "minerals",
+        "gold",
+        "quarry",
+        "petroleum",
+        "artisanal"
+      ],
+      "kw_am": [
+        "ማዕድን",
+        "ወርቅ"
+      ]
+    },
+    {
+      "code": "investment",
+      "en": "Investment",
+      "am": "ኢንቨስትመንት",
+      "kw_en": [
+        "investment",
+        "investor",
+        "investors",
+        "public private partnership",
+        "ppp",
+        "special economic zone"
+      ],
+      "kw_am": [
+        "ኢንቨስትመንት",
+        "ባለሀብት",
+        "ባለሃብት"
+      ]
+    },
+    {
+      "code": "tax",
+      "en": "Tax & revenue",
+      "am": "ግብርና ገቢ",
+      "kw_en": [
+        "tax",
+        "taxes",
+        "taxation",
+        "vat",
+        "excise",
+        "income tax",
+        "revenue"
+      ],
+      "kw_am": [
+        "ግብር",
+        "ታክስ",
+        "ቀረጥ",
+        "ኤክሳይዝ"
+      ]
+    },
+    {
+      "code": "customs",
+      "en": "Customs & trade",
+      "am": "ጉምሩክና ንግድ",
+      "kw_en": [
+        "customs",
+        "import",
+        "export",
+        "tariff",
+        "trade",
+        "commercial code",
+        "wto",
+        "afcfta",
+        "competition"
+      ],
+      "kw_am": [
+        "ጉምሩክ",
+        "ንግድ",
+        "ወጪ ንግድ",
+        "ውድድር"
+      ]
+    },
+    {
+      "code": "finance",
+      "en": "Banking & finance",
+      "am": "ባንክና ፋይናንስ",
+      "kw_en": [
+        "bank",
+        "banking",
+        "monetary",
+        "foreign exchange",
+        "capital market",
+        "securities",
+        "insurance",
+        "microfinance",
+        "payment",
+        "payments"
+      ],
+      "kw_am": [
+        "ባንክ",
+        "ፋይናንስ",
+        "የውጭ ምንዛሪ",
+        "ካፒታል ገበያ",
+        "መድን",
+        "ክፍያ"
+      ]
+    },
+    {
+      "code": "labour",
+      "en": "Labour & employment",
+      "am": "ሥራና ሠራተኛ",
+      "kw_en": [
+        "labour",
+        "labor",
+        "employment",
+        "employee",
+        "worker",
+        "workers",
+        "wage",
+        "occupational"
+      ],
+      "kw_am": [
+        "ሠራተኛ",
+        "አሠሪ",
+        "ቅጥር",
+        "ደመወዝ"
+      ]
+    },
+    {
+      "code": "health",
+      "en": "Health, food & drugs",
+      "am": "ጤና፣ ምግብና መድኃኒት",
+      "kw_en": [
+        "health",
+        "food",
+        "drug",
+        "drugs",
+        "medicine",
+        "medicines",
+        "pharmaceutical",
+        "cosmetics",
+        "tobacco"
+      ],
+      "kw_am": [
+        "ጤና",
+        "ምግብ",
+        "መድኃኒት",
+        "ኮስሞቲክስ",
+        "ትምባሆ"
+      ]
+    },
+    {
+      "code": "ip",
+      "en": "Intellectual property",
+      "am": "አእምሯዊ ንብረት",
+      "kw_en": [
+        "intellectual property",
+        "trademark",
+        "trademarks",
+        "patent",
+        "patents",
+        "copyright"
+      ],
+      "kw_am": [
+        "አእምሯዊ ንብረት",
+        "የንግድ ምልክት",
+        "ፓተንት",
+        "የቅጂ መብት"
+      ]
+    },
+    {
+      "code": "digital",
+      "en": "Digital, data & telecom",
+      "am": "ዲጂታል፣ መረጃና ቴሌኮም",
+      "kw_en": [
+        "data",
+        "digital",
+        "cyber",
+        "cybersecurity",
+        "telecom",
+        "telecommunications",
+        "electronic",
+        "ict",
+        "personal data"
+      ],
+      "kw_am": [
+        "ዲጂታል",
+        "ሳይበር",
+        "ቴሌኮም",
+        "ኤሌክትሮኒክ",
+        "የግል መረጃ"
+      ]
+    },
+    {
+      "code": "energy",
+      "en": "Energy & utilities",
+      "am": "ኢነርጂ",
+      "kw_en": [
+        "energy",
+        "electricity",
+        "power generation",
+        "power plant",
+        "grid",
+        "fuel",
+        "water supply",
+        "hydropower"
+      ],
+      "kw_am": [
+        "ኢነርጂ",
+        "ኤሌክትሪክ",
+        "ኤሌክትሪክ ኃይል",
+        "ነዳጅ",
+        "የውሃ አቅርቦት"
+      ]
+    },
+    {
+      "code": "land",
+      "en": "Land & property",
+      "am": "መሬትና ንብረት",
+      "kw_en": [
+        "land",
+        "real estate",
+        "urban",
+        "housing",
+        "expropriation",
+        "real property",
+        "condominium"
+      ],
+      "kw_am": [
+        "መሬት",
+        "የመኖሪያ ቤት",
+        "ከተማ",
+        "የማይንቀሳቀስ ንብረት",
+        "ኮንዶሚኒየም"
+      ]
+    },
+    {
+      "code": "environment",
+      "en": "Environment & climate",
+      "am": "አካባቢ",
+      "kw_en": [
+        "environment",
+        "environmental",
+        "climate",
+        "ecosystem",
+        "forest",
+        "biodiversity",
+        "pollution"
+      ],
+      "kw_am": [
+        "አካባቢ",
+        "የአየር ንብረት",
+        "ደን",
+        "ብዝሃ ሕይወት",
+        "ስነ ምህዳር"
+      ]
+    },
+    {
+      "code": "justice",
+      "en": "Justice & courts",
+      "am": "ፍትሕና ፍርድ ቤቶች",
+      "kw_en": [
+        "court",
+        "courts",
+        "criminal",
+        "crime",
+        "justice",
+        "procedure",
+        "prosecution",
+        "evidence",
+        "arbitration",
+        "extradition",
+        "legal assistance",
+        "sentenced persons"
+      ],
+      "kw_am": [
+        "ፍርድ ቤት",
+        "ወንጀል",
+        "ፍትሕ",
+        "ሥነ ሥርዓት",
+        "ግልግል"
+      ]
+    },
+    {
+      "code": "treaty",
+      "en": "Treaties & loans",
+      "am": "ስምምነቶችና ብድሮች",
+      "kw_en": [
+        "ratification",
+        "ratify",
+        "treaty",
+        "convention",
+        "agreement",
+        "loan",
+        "credit",
+        "grant",
+        "financing agreement"
+      ],
+      "kw_am": [
+        "ማጽደቂያ",
+        "ስምምነት",
+        "ብድር",
+        "ኮንቬንሽን"
+      ]
+    },
+    {
+      "code": "transport",
+      "en": "Transport & logistics",
+      "am": "ትራንስፖርትና ሎጂስቲክስ",
+      "kw_en": [
+        "transport",
+        "aviation",
+        "railway",
+        "road",
+        "logistics",
+        "maritime",
+        "shipping"
+      ],
+      "kw_am": [
+        "ትራንስፖርት",
+        "አቪዬሽን",
+        "ባቡር",
+        "መንገድ",
+        "ሎጂስቲክስ"
+      ]
+    },
+    {
+      "code": "governance",
+      "en": "Governance & elections",
+      "am": "አስተዳደርና ምርጫ",
+      "kw_en": [
+        "election",
+        "elections",
+        "political party",
+        "civil service",
+        "administrative",
+        "procurement",
+        "public service"
+      ],
+      "kw_am": [
+        "ምርጫ",
+        "የፖለቲካ ፓርቲ",
+        "ሲቪል ሰርቪስ",
+        "አስተዳደር",
+        "ግዥ"
+      ]
+    },
+    {
+      "code": "rights",
+      "en": "Rights, media & information",
+      "am": "መብቶችና ሚዲያ",
+      "kw_en": [
+        "human rights",
+        "freedom",
+        "media",
+        "access to information",
+        "freedom of information",
+        "civil society",
+        "refugee",
+        "refugees"
+      ],
+      "kw_am": [
+        "ሰብዓዊ መብት",
+        "ነፃነት",
+        "ሚዲያ",
+        "መገናኛ ብዙኃን",
+        "ስደተኛ",
+        "የመረጃ ነፃነት"
+      ]
+    },
+    {
+      "code": "agriculture",
+      "en": "Agriculture",
+      "am": "ግብርና",
+      "kw_en": [
+        "agriculture",
+        "agricultural",
+        "farming",
+        "livestock",
+        "coffee",
+        "seed"
+      ],
+      "kw_am": [
+        "ግብርና",
+        "እንስሳት",
+        "ቡና",
+        "ዘር"
+      ]
+    }
+  ]
+}

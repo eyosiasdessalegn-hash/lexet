@@ -1,0 +1,136 @@
+# The LexET server, run free on GitHub: every 30 minutes it crawls the sources that are due,
+# verifies, and publishes the feed to GitHub Pages at https://<owner>.github.io/<repository>/ .
+# The app reads that address (Settings › Server); APKs built by build.yml point at it already.
+#
+# One-time setup: Settings › Pages › Build and deployment › Source: "GitHub Actions".
+#
+# Add an official item by hand (for sources whose robots.txt forbids crawling, such as the
+# Ministry of Justice and the House): Actions › Feed › Run workflow, fill in the form.
+#
+# The database lives in the Actions cache between runs. If it is ever lost, the next run starts
+# a new dataset; phones notice the new epoch and download the archive again.
+#
+# Optional push notifications: variable LEXET_FCM_PROJECT_ID and secret LEXET_FCM_CREDENTIALS_JSON
+# (the service-account key file's contents). See docs/OPERATIONS.md.
+name: Feed
+
+on:
+  schedule:
+    - cron: "7,37 * * * *"   # every 30 minutes; GitHub may start a run a few minutes late
+  workflow_dispatch:
+    inputs:
+      source:
+        description: "Add an official item — source (leave the URL empty to just run the crawl)"
+        type: choice
+        default: moj_laws
+        options: [moj_laws, hopr_laws, negarit_manual, efda_docs, eipa]
+      url:
+        description: "Link to the official document or page"
+        required: false
+      title:
+        description: "Title as published, e.g. Commercial Registration Proclamation No. 1440/2026 የንግድ ምዝገባ አዋጅ ቁጥር 1440/2018"
+        required: false
+      date:
+        description: "Publication date, YYYY-MM-DD"
+        required: false
+      status:
+        description: "Stage of the instrument"
+        type: choice
+        default: in_force
+        options: [in_force, approved, tabled, draft, policy_signal, amended, repealed]
+      gazette:
+        description: "This is the Federal Negarit Gazeta publication"
+        type: boolean
+        default: false
+      text:
+        description: "Optional: first paragraph(s) of the text (helps matching and the summary)"
+        required: false
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+  actions: write   # keeps this schedule from being paused after 60 quiet days
+
+concurrency:
+  group: lexet-feed
+  cancel-in-progress: false
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    env:
+      LEXET_DATABASE_URL: sqlite:///${{ github.workspace }}/state/lexet.db
+      LEXET_USER_AGENT: "LexETBot/0.2 (+https://github.com/${{ github.repository }}; Ethiopian legal-news aggregator)"
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: backend/pyproject.toml
+
+      - name: Install the LexET server
+        run: pip install "./backend[push]"
+
+      - name: Restore database and last published files
+        uses: actions/cache@v6
+        with:
+          path: state
+          key: lexet-state-${{ github.run_id }}-${{ github.run_attempt }}
+          restore-keys: lexet-state-
+
+      - name: Add official item (manual runs with a URL)
+        if: github.event_name == 'workflow_dispatch' && inputs.url != ''
+        env:
+          SRC: ${{ inputs.source }}
+          URL: ${{ inputs.url }}
+          TITLE: ${{ inputs.title }}
+          DATE: ${{ inputs.date }}
+          STATUS: ${{ inputs.status }}
+          GAZETTE: ${{ inputs.gazette }}
+          TEXT: ${{ inputs.text }}
+        run: |
+          mkdir -p state
+          args=(submit --source "$SRC" --url "$URL" --title "${TITLE:-$URL}" --status "$STATUS" --primary)
+          [ -n "$DATE" ] && args+=(--date "$DATE")
+          [ -n "$TEXT" ] && args+=(--text "$TEXT")
+          [ "$GAZETTE" = "true" ] && args+=(--gazette)
+          lexet "${args[@]}"
+
+      - name: Crawl, verify and build the feed
+        run: |
+          mkdir -p state
+          lexet publish --out state/site --report state/report.json
+          python - <<'EOF'
+          import sqlite3
+          c = sqlite3.connect("state/lexet.db"); c.execute("PRAGMA wal_checkpoint(TRUNCATE)"); c.close()
+          EOF
+
+      - uses: actions/upload-pages-artifact@v5
+        with:
+          path: state/site
+
+      - name: Publish to GitHub Pages
+        id: deploy
+        uses: actions/deploy-pages@v5
+
+      - name: Push notification (if configured)
+        env:
+          LEXET_FCM_PROJECT_ID: ${{ vars.LEXET_FCM_PROJECT_ID }}
+          FCM_JSON: ${{ secrets.LEXET_FCM_CREDENTIALS_JSON }}
+        run: |
+          if [ -z "$LEXET_FCM_PROJECT_ID" ] || [ -z "$FCM_JSON" ]; then echo "push not configured"; exit 0; fi
+          printf '%s' "$FCM_JSON" > "$RUNNER_TEMP/fcm.json"
+          LEXET_FCM_CREDENTIALS="$RUNNER_TEMP/fcm.json" lexet tickle --report state/report.json
+
+      - name: Keep the schedule active
+        continue-on-error: true
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh api -X PUT "repos/${{ github.repository }}/actions/workflows/feed.yml/enable"

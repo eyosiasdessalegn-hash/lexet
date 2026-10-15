@@ -1,0 +1,32 @@
+[project]
+name = "lexet-backend"
+version = "0.1.0"
+description = "Ethiopian legal intelligence feed: aggregation, verification and sync API"
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi>=0.110",
+  "uvicorn[standard]>=0.29",
+  "sqlalchemy>=2.0",
+  "httpx>=0.27",
+  "lxml>=5.0",
+  "feedparser>=6.0",
+  "pypdf>=4.0",
+]
+
+[project.optional-dependencies]
+push = ["google-auth>=2.29", "requests>=2.31"]
+postgres = ["psycopg[binary]>=3.1"]
+dev = ["pytest>=8", "respx>=0.21"]
+
+[project.scripts]
+lexet = "lexet.cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+include = ["lexet*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

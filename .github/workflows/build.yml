@@ -1,0 +1,96 @@
+# Builds installable Android APKs (and runs all tests) on every push to main,
+# on version tags (v0.1.0 → a GitHub Release with the APKs attached), or on demand.
+#
+# Repository settings (all optional):
+#   Variables  LEXET_API_URL           feed address built into the app. Default: this repository's GitHub
+#                                      Pages address (https://<owner>.github.io/<repository>/), which the
+#                                      Feed workflow (feed.yml) publishes to.
+#              LEXET_FCM_APP_ID, LEXET_FCM_API_KEY, LEXET_FCM_PROJECT_ID, LEXET_FCM_SENDER_ID   (push)
+#   Secrets    LEXET_KEYSTORE_BASE64   base64 of your release keystore (.jks)
+#              LEXET_KEYSTORE_PASSWORD, LEXET_KEY_ALIAS, LEXET_KEY_PASSWORD
+# Without a keystore the release APK is signed with a throwaway debug key: it installs,
+# but later properly signed versions cannot be installed over it.
+name: Build
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: write   # to publish GitHub Releases on tags
+
+jobs:
+  backend:
+    runs-on: ubuntu-latest
+    defaults: { run: { working-directory: backend } }
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with: { python-version: "3.12" }
+      - run: pip install -e ".[dev]"
+      - run: pytest -q
+
+  android:
+    runs-on: ubuntu-latest
+    defaults: { run: { working-directory: android } }
+    env:
+      HAS_KEYSTORE: ${{ secrets.LEXET_KEYSTORE_BASE64 != '' }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-java@v6
+        with: { distribution: temurin, java-version: "17" }
+      - uses: gradle/actions/setup-gradle@v6
+
+      - name: Restore release keystore
+        if: env.HAS_KEYSTORE == 'true'
+        env:
+          KS_B64: ${{ secrets.LEXET_KEYSTORE_BASE64 }}
+          KS_PASS: ${{ secrets.LEXET_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.LEXET_KEY_ALIAS }}
+          KEY_PASS: ${{ secrets.LEXET_KEY_PASSWORD }}
+        run: |
+          echo "$KS_B64" | base64 -d > "$RUNNER_TEMP/lexet.jks"
+          mkdir -p ~/.gradle
+          {
+            echo "lexet.keystore=$RUNNER_TEMP/lexet.jks"
+            echo "lexet.keystorePassword=$KS_PASS"
+            echo "lexet.keyAlias=$KEY_ALIAS"
+            echo "lexet.keyPassword=$KEY_PASS"
+          } >> ~/.gradle/gradle.properties
+
+      - name: Test and build APKs
+        run: >
+          chmod +x gradlew && ./gradlew --no-daemon
+          :domain:test :app:testDebugUnitTest :app:assembleDebug :app:assembleRelease
+          -Plexet.versionCode=${{ github.run_number }}
+          -Plexet.versionName=${{ github.ref_type == 'tag' && github.ref_name || format('0.1.{0}', github.run_number) }}
+          -Plexet.apiUrl=${{ vars.LEXET_API_URL || format('https://{0}.github.io/{1}/', github.repository_owner, github.event.repository.name) }}
+          -Plexet.fcm.appId=${{ vars.LEXET_FCM_APP_ID }}
+          -Plexet.fcm.apiKey=${{ vars.LEXET_FCM_API_KEY }}
+          -Plexet.fcm.projectId=${{ vars.LEXET_FCM_PROJECT_ID }}
+          -Plexet.fcm.senderId=${{ vars.LEXET_FCM_SENDER_ID }}
+
+      - name: Collect APKs
+        run: |
+          mkdir -p ../dist
+          cp app/build/outputs/apk/release/*.apk ../dist/LexET-${{ github.run_number }}.apk
+          cp app/build/outputs/apk/debug/*.apk ../dist/LexET-${{ github.run_number }}-debug.apk
+          ls -la ../dist
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: LexET-apk-${{ github.run_number }}
+          path: dist/*.apk
+
+      - name: Publish release (version tags only)
+        if: github.ref_type == 'tag'
+        uses: softprops/action-gh-release@v3
+        with:
+          files: dist/*.apk
+          body: |
+            Install: download `LexET-${{ github.run_number }}.apk` on your Android phone (8.0 or newer) and open it.
+            Android will ask you to allow installs from your browser or file manager the first time.
+            The `-debug` APK is for testing against a local backend over plain HTTP.

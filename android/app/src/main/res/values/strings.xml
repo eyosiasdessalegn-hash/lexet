@@ -1,0 +1,241 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name" translatable="false">LexET</string>
+
+    <!-- Navigation -->
+    <string name="nav_feed">Feed</string>
+    <string name="nav_search">Search</string>
+    <string name="nav_saved">Saved</string>
+    <string name="nav_reports">Reports</string>
+    <string name="nav_settings">Settings</string>
+
+    <!-- Actions -->
+    <string name="action_add_tag">Add tag</string>
+    <string name="action_allow">Allow</string>
+    <string name="action_back">Back</string>
+    <string name="action_bookmark">Bookmark</string>
+    <string name="action_cancel">Cancel</string>
+    <string name="action_clear">Clear</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_export_pdf">Export PDF</string>
+    <string name="action_filters">Filters</string>
+    <string name="action_load_more">Load more</string>
+    <string name="action_mark_all_read">Mark all as read</string>
+    <string name="action_mark_read">Mark read</string>
+    <string name="action_mark_unread">Mark unread</string>
+    <string name="action_not_now">Not now</string>
+    <string name="action_open_pdf">Open PDF</string>
+    <string name="action_open_source">Open source</string>
+    <string name="action_refresh">Refresh</string>
+    <string name="action_remove_bookmark">Remove bookmark</string>
+    <string name="action_remove_tag">Remove tag</string>
+    <string name="action_reset">Reset</string>
+    <string name="action_save">Save</string>
+    <string name="action_save_pdf">Save to device</string>
+    <string name="action_share">Share</string>
+    <string name="action_sync_now">Sync now</string>
+
+    <!-- Badges and labels -->
+    <string name="badge_international">International</string>
+    <string name="badge_official">Official</string>
+    <string name="badge_unconfirmed">Unconfirmed</string>
+    <string name="badge_verified">Verified</string>
+    <string name="label_international">International</string>
+    <string name="tier_agency">News agency</string>
+    <string name="tier_international">International</string>
+    <string name="tier_official">Official</string>
+    <string name="tier_press">Independent press</string>
+
+    <!-- Notification channels -->
+    <string name="channel_in_force">Now in force</string>
+    <string name="channel_in_force_desc">Laws published in the Federal Negarit Gazeta and in force</string>
+    <string name="channel_imminent">About to be released</string>
+    <string name="channel_imminent_desc">Approved by parliament or the Council of Ministers, awaiting the Gazeta</string>
+    <string name="channel_upcoming">Drafts and bills</string>
+    <string name="channel_upcoming_desc">Draft proclamations, bills before parliament and policy initiatives</string>
+    <string name="channel_digest">Digest</string>
+    <string name="channel_digest_desc">Hourly or daily summary of verified developments</string>
+    <string name="channel_reports">Reports</string>
+    <string name="channel_reports_desc">Weekly, monthly and yearly compilations when ready</string>
+    <string name="channel_sync">Background sync</string>
+    <string name="channel_sync_desc">Shown briefly while an urgent sync runs</string>
+    <string name="notif_public_title">New verified legal development</string>
+    <string name="digest_more">+%1$d more</string>
+    <string name="report_ready_title">Compilation ready</string>
+    <string name="syncing">Syncing…</string>
+
+    <!-- Feed -->
+    <string name="feed_empty_title">Nothing here yet</string>
+    <string name="feed_empty_body">New legal developments appear here as the app syncs with the server.</string>
+    <string name="feed_setup_title">Choose your LexET feed</string>
+    <string name="feed_setup_body">LexET gets its verified legal updates from a LexET feed. Enter the feed\'s address in Settings › Server, for example yourname.github.io/lexet</string>
+    <string name="feed_no_server_title">Can\'t reach the server</string>
+    <string name="feed_no_server_body">No LexET feed could be reached at %1$s. Check the address in Settings › Server, and your internet connection.</string>
+    <string name="perm_title">Allow notifications</string>
+    <string name="perm_body">Get notified, including on the lock screen, when new verified proclamations, regulations and directives appear. Choose exactly what notifies you in Settings.</string>
+    <string name="sync_never">Not synced yet</string>
+    <string name="sync_just_now">Updated just now</string>
+    <string name="sync_minutes_ago">Updated %1$d min ago</string>
+    <string name="sync_hours_ago">Updated %1$d h ago</string>
+    <string name="sync_offline">Offline — will sync when back online</string>
+
+    <!-- Search and filters -->
+    <string name="search_hint">Proclamation, number, title…  e.g. 1427/2018</string>
+    <string name="search_empty_title">No results</string>
+    <string name="search_empty_body">Try other words or remove filters. Search treats Amharic spelling variants (ሠ/ሰ, ፀ/ጸ, ሐ/ሀ) as the same.</string>
+    <string name="filter_all">All</string>
+    <string name="filter_any_body">Any body</string>
+    <string name="filter_bookmarked">Bookmarks</string>
+    <string name="filter_ethiopia">Ethiopia</string>
+    <string name="filter_issuer">Issuing body</string>
+    <string name="filter_jurisdiction">Scope</string>
+    <string name="filter_mine">Mine</string>
+    <string name="filter_period">Period</string>
+    <string name="filter_stage">Stage</string>
+    <string name="filter_topic">Topic</string>
+    <string name="filter_type">Document type</string>
+    <string name="filter_unread">Unread</string>
+    <string name="filter_verification">Verification</string>
+    <string name="period_any">Any time</string>
+    <string name="period_week">Last 7 days</string>
+    <string name="period_month">Last 30 days</string>
+    <string name="period_year">Last year</string>
+
+    <!-- Detail -->
+    <string name="section_summary">Summary</string>
+    <string name="section_facts">Details</string>
+    <string name="section_tags">Tags and note</string>
+    <string name="section_sources">Sources</string>
+    <string name="fact_issuer">Issuing body</string>
+    <string name="fact_initiator">Initiated by</string>
+    <string name="fact_status">Status</string>
+    <string name="fact_first_reported">First reported</string>
+    <string name="fact_status_date">Status since</string>
+    <string name="fact_amends">Amends</string>
+    <string name="no_amharic_title">Amharic title not yet published</string>
+    <string name="no_english_title">English title not yet published</string>
+    <string name="note_empty">Tap to add a private note</string>
+    <string name="note_title">Note</string>
+    <string name="reported_later_stage">A source reports a later stage (%1$s). It will be shown here once corroborated.</string>
+    <string name="sources_explainer">Each publisher counts once. Copies of another outlet\'s report (syndication) do not count.</string>
+    <string name="source_counted">Counted</string>
+    <string name="source_not_counted">Not counted: %1$s</string>
+    <string name="source_gazette">Negarit Gazeta publication</string>
+
+    <!-- Saved -->
+    <string name="saved_empty_title">Nothing saved</string>
+    <string name="saved_empty_body">Bookmark or tag items and they will be collected here.</string>
+
+    <!-- Reports -->
+    <string name="reports_intro">Weekly, monthly and yearly compilations of new Ethiopian legal documents are prepared automatically. Read them in the app or export a PDF with a table of contents and source citations.</string>
+    <string name="reports_compile">Compile</string>
+    <string name="reports_current">Current</string>
+    <string name="reports_previous">Previous</string>
+    <string name="reports_saved">Generated PDFs</string>
+    <string name="reports_none">No PDFs generated yet.</string>
+    <string name="kind_week">Weekly</string>
+    <string name="kind_month">Monthly</string>
+    <string name="kind_year">Yearly</string>
+    <string name="no_pdf_viewer">No app found to open PDFs</string>
+    <string name="saved_to_device">Saved to device</string>
+
+    <!-- PDF / report text -->
+    <string name="pdf_title">Compilation of Ethiopian legal developments</string>
+    <string name="pdf_range">%1$s to %2$s</string>
+    <string name="pdf_generated">Generated %1$s</string>
+    <string name="pdf_totals_heading">At a glance</string>
+    <string name="pdf_totals">New instruments: %1$d · Status changes: %2$d · Verified: %3$d · Unconfirmed: %4$d</string>
+    <string name="pdf_verification_note">“Verified” means reported by at least three independent publishers, one of them an official government publication or the Ethiopian News Agency. Copies of another outlet\'s report are not counted. Unconfirmed items are included and marked as such.</string>
+    <string name="pdf_disclaimer">Compiled automatically from official and public sources. Not legal advice: check the official text in the Federal Negarit Gazeta before relying on any provision.</string>
+    <string name="pdf_empty">No new Ethiopian legal developments were recorded in this period.</string>
+    <string name="pdf_contents">Contents</string>
+    <string name="pdf_references">References</string>
+    <string name="pdf_issuer">Issued by: %1$s</string>
+    <string name="pdf_status">Status: %1$s</string>
+    <string name="pdf_status_change">Status change in this period — now: %1$s</string>
+    <string name="pdf_first_reported">First reported: %1$s</string>
+    <string name="pdf_status_date">Status since: %1$s</string>
+    <string name="pdf_verified">Verified — %1$d independent sources</string>
+    <string name="pdf_unconfirmed">Unconfirmed — %1$d independent source(s) so far</string>
+    <string name="pdf_sources">Sources: %1$s</string>
+    <string name="pdf_page">Page %1$d of %2$d</string>
+
+    <!-- Settings -->
+    <string name="set_notifications">Notifications</string>
+    <string name="set_notify_verified">Verified Ethiopian developments</string>
+    <string name="set_notify_verified_desc">Only when corroborated by at least three independent sources</string>
+    <string name="set_lock_screen">Show details on the lock screen</string>
+    <string name="set_lock_screen_desc">When off, the lock screen only says “New verified legal development”</string>
+    <string name="set_digest">Delivery</string>
+    <string name="digest_instant">Instant</string>
+    <string name="digest_hourly">Hourly digest</string>
+    <string name="digest_daily">Daily digest (08:00)</string>
+    <string name="set_filter_types">Document types</string>
+    <string name="set_filter_urgency">Stage</string>
+    <string name="set_filter_topics">Topics</string>
+    <string name="set_filter_issuers">Issuing bodies</string>
+    <string name="set_filter_keywords">Keywords</string>
+    <string name="set_empty_means_all">Nothing selected means everything notifies.</string>
+    <string name="set_none">None</string>
+    <string name="keywords_help">One keyword per line, in Amharic or English, e.g. ማዕድን, tax, data protection. An item notifies if any keyword matches.</string>
+    <string name="set_display">Display</string>
+    <string name="set_title_language">Title language</string>
+    <string name="lang_amharic_first">Amharic first</string>
+    <string name="lang_english_first">English first</string>
+    <string name="set_ui_language_hint">To change the app language, use your phone\'s Settings › Apps › LexET › Language.</string>
+    <string name="set_dates">Dates</string>
+    <string name="dates_both">Both</string>
+    <string name="dates_gregorian">Gregorian</string>
+    <string name="dates_ethiopian">Ethiopian (E.C.)</string>
+    <string name="set_theme">Theme</string>
+    <string name="theme_system">System</string>
+    <string name="theme_light">Light</string>
+    <string name="theme_dark">Dark</string>
+    <string name="set_auto_reports">Prepare compilations automatically</string>
+    <string name="set_auto_reports_desc">Once a day, if a week, month or year has just ended</string>
+    <string name="set_notify_reports">Notify me when a compilation is ready</string>
+    <string name="set_report_calendar">Calendar for monthly and yearly compilations</string>
+    <string name="set_sync">Sync and data</string>
+    <string name="set_push">Instant push (Firebase)</string>
+    <string name="set_push_desc">The server wakes the app when something changes. When off, the app checks at the interval below.</string>
+    <string name="set_push_unavailable">Push is not configured in this build. The app checks at the interval below and immediately when the network comes back.</string>
+    <string name="set_interval">Background check interval</string>
+    <string name="minutes_n">%1$d min</string>
+    <string name="hours_n">%1$d h</string>
+    <string name="set_unmetered">Background sync on Wi-Fi only</string>
+    <string name="set_unmetered_desc">Saves mobile data. Opening the app always syncs.</string>
+    <string name="set_last_sync">Last synced %1$s</string>
+    <string name="set_last_error">Last error: %1$s</string>
+    <string name="set_sources_privacy">Sources and privacy</string>
+    <string name="set_sources">Monitored sources</string>
+    <string name="set_sources_desc">Tiers and monitoring status</string>
+    <string name="set_server">Server</string>
+    <string name="server_help">Address of your LexET feed, e.g. yourname.github.io/lexet or your server\'s https address. Changing it clears the local archive and downloads it again.</string>
+    <string name="server_not_set">Not set</string>
+    <string name="privacy_text">Privacy: no account is needed and no name, email or device identifier is collected. Filters, bookmarks, tags and notes stay on this device. The server only receives the last sync version number. With push on, Google Firebase uses one anonymous topic subscription.</string>
+    <string name="verification_rule_text">Verification rule: an Ethiopian development is “verified” when at least three independent publishers report it, one of them an official government source (Negarit Gazeta, a ministry, parliament) or the Ethiopian News Agency. Unconfirmed items are never hidden — they are marked, and they do not notify.</string>
+
+    <!-- Sources screen -->
+    <string name="sources_intro">Sources the server monitors, their tier, and whether the site allows automated monitoring.</string>
+    <string name="sources_error">Could not load sources: %1$s</string>
+    <string name="robots_allowed">Monitored automatically</string>
+    <string name="robots_disallowed">Site disallows automated monitoring — entered by curators</string>
+    <string name="robots_unknown">Status unknown</string>
+
+    <plurals name="source_count">
+        <item quantity="one">%d source</item>
+        <item quantity="other">%d sources</item>
+    </plurals>
+    <plurals name="verified_by_sources">
+        <item quantity="one">Corroborated by %d independent source</item>
+        <item quantity="other">Corroborated by %d independent sources</item>
+    </plurals>
+    <plurals name="result_count">
+        <item quantity="one">%d result</item>
+        <item quantity="other">%d results</item>
+    </plurals>
+    <plurals name="report_entries">
+        <item quantity="one">%d entry</item>
+        <item quantity="other">%d entries</item>
+    </plurals>
+</resources>
