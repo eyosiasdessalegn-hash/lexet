@@ -2,29 +2,41 @@
 
 ## Monitored today
 
-| Source | Tier | Method | Interval | Status on 15 Oct 2026 |
-|---|---|---|---|---|
-| Ministry of Justice — laws, amendments, registered directives (`justice.gov.et`) | 1 | Official listing harvester + PDF text | 60 min | **Robots policy refused automated fetching.** Assisted ingestion until permission is granted. Listing path to be confirmed. |
-| House of Peoples' Representatives — laws and drafts (`hopr.gov.et`) | 1 | Official listing harvester + PDF text | 60 min | **Robots policy refused automated fetching.** Assisted ingestion until permission is granted. |
-| Federal Negarit Gazeta | 1 | Gazette PDFs detected on official sites; assisted entry | — | No public machine-readable feed exists; issues are detected by their header text. |
-| Ethiopian Food and Drug Authority — policies, legislation, regulation documents | 1 | Listing harvester (`/doc-category/policies-legislation-and-regulation/`, paginated) | 6 h | Path confirmed via search results; to be checked with `lexet doctor`. |
-| Ethiopian Intellectual Property Authority | 1 | WordPress | 6 h | WordPress site confirmed; IP gazette notices and directives. |
-| Ethiopian News Agency — English and Amharic | 2 | News list → articles | 15 min | Article URL pattern to be confirmed with `lexet doctor`. |
-| The Reporter Ethiopia | 3 | WordPress REST (RSS fallback) | 30 min | |
-| Addis Standard | 3 | WordPress REST | 30 min | |
-| Capital Ethiopia | 3 | WordPress REST | 60 min | |
-| Addis Fortune | 3 | WordPress REST | 60 min | |
-| Fana Media Corporation (English) | 3 | WordPress REST | 30 min | Moved to `fanamc.com`; copies of ENA are discounted automatically. |
-| Chilot | 3 | WordPress REST | 3 h | Legal information site. |
-| UN News — Law and crime prevention | 9 | RSS | 6 h | |
-| JURIST | 9 | RSS | 6 h | |
-| African Union — press releases | 9 | News list → articles | 6 h | |
-| IGAD | 9 | WordPress | 12 h | |
+Status from the **Check sources** workflow, run from GitHub's machines on 16 Oct 2026
+(re-run it any time: *Actions › Check sources › Run workflow*).
 
-Endpoint paths were set from public information; the build environment could
-not reach these sites. After deployment run `lexet doctor` — it prints, per source,
-whether robots.txt allows us, whether the site is reachable, and how many legal
-items the adapter finds — and correct paths in `backend/lexet/sources/catalog.py`.
+| Source | Tier | Method | Status on 16 Oct 2026 |
+|---|---|---|---|
+| Ministry of Justice (`justice.gov.et`) | 1 | Official listing + PDF text | robots.txt unreachable from GitHub → not crawled. Use *Actions › Feed › Run workflow* to add items. |
+| House of Peoples' Representatives (`hopr.gov.et`) | 1 | Official listing + PDF text | Same as MoJ. |
+| Federal Negarit Gazeta | 1 | Detected on official sites; manual entry | No public feed. |
+| Ethiopian Food and Drug Authority | 1 | Listing harvester | 403 to automated requests. |
+| Ethiopian Intellectual Property Authority | 1 | WordPress | ✔ working |
+| National Bank of Ethiopia | 1 | WordPress | ✔ reachable (few posts) |
+| Ethiopian Capital Market Authority | 1 | WordPress → RSS | ✔ working |
+| Ethiopian News Agency — English and Amharic | 2 | News list → articles | ✔ working (fixed: headline links) |
+| The Reporter Ethiopia | 3 | WordPress | ✔ working |
+| Capital Ethiopia, Addis Fortune | 3 | WordPress / RSS | ✔ working |
+| Fana — English and Amharic | 3 | RSS | ✔ working |
+| BBC News Amharic | 3 | RSS | ✔ working |
+| Addis Standard | 3 | WordPress | robots.txt unreachable from GitHub → not crawled |
+| Borkena | 4 | WordPress | ✔ working |
+| Ethiopia Insight, Ethiopian Monitor | 4 | WordPress | ✔ reachable (few posts) |
+| GDELT (worldwide news search) | 4 | API; each article keeps its own outlet | Rate-limited from GitHub's shared machines; retried each run |
+| *Disabled:* Reporter Amharic, Walta, Ethiopian Press Agency (bot challenges); Chilot (404); DW Amharic (empty feed); Ethiopian Business Review (spam posts); Google News (robots.txt disallows) | | | Notes in `catalog.py` |
+| UN News, AU, IGAD | 9 | RSS / list / WordPress | ✔ working (JURIST: 403) |
+
+**Coverage policy (since 0.3.0).** Every legal update is published whatever the
+source's reliability: tier 4 covers smaller outlets and aggregators, and Ethiopian
+legal news that names no specific law is kept as its own single-source item.
+Each item carries its label — *Verified* (three independent outlets, one of them
+official or ENA) or *Unconfirmed* — so the reader decides how far to trust it.
+
+**LinkedIn.** LinkedIn prohibits automated access without its express permission
+(robots.txt notice; User Agreement), and its API does not offer search of public
+posts, so it is not crawled. Users save posts themselves: *Share › Aristophanes* in
+the LinkedIn app stores the post in their archive, and *Search › LinkedIn posts*
+opens a web search of public posts in the browser.
 
 ### The robots.txt finding
 
@@ -34,7 +46,7 @@ permission is granted. Options, in order of value:
 
 1. **Ask for access.** A short letter to the Ministry of Justice and the House of
    Peoples' Representatives requesting either crawler permission for the
-   `LexETBot` user agent (a robots.txt `Allow` rule) or a periodic data export
+   `AristophanesBot` user agent (a robots.txt `Allow` rule) or a periodic data export
    (CSV/JSON of law ID, title in both languages, type, date, PDF link). This also
    gives the project an official relationship that could later become an MoU.
 2. **Assisted ingestion** (works now): a curator submits each new official item

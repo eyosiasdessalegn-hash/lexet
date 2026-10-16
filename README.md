@@ -1,12 +1,22 @@
-# LexET — Ethiopian legal intelligence feed
+# Aristophanes — Ethiopian legal intelligence
+
+*(formerly LexET; the code keeps the `lexet` package names.)*
 
 A native Android app and its backend that track Ethiopian legal developments —
 proclamations (new and amended), draft bills before the House of Peoples'
 Representatives, Council of Ministers regulations, ministerial and agency
-directives, and policy signals — and surface each one only after it has been
-**corroborated by at least three independent sources**. A secondary stream of
-international and regional developments is mixed in at roughly **10 Ethiopian
-items to 1 international item**.
+directives, policy signals and legal news — from official, press and other
+sources. Every update is shown, labelled **Verified** once at least three
+independent sources (one official or ENA) report it, otherwise **Unconfirmed**.
+A secondary stream of international and regional developments is mixed in at
+roughly **10 Ethiopian items to 1 international item**.
+
+In the app: a feed, an archive with Amharic-aware search plus **Search the web**
+(laws as PDF, Ethiopian legal sites, LinkedIn posts, the whole web — opened in the
+browser), **Share › Aristophanes** to save posts from LinkedIn, Telegram or any app
+into the archive, notifications (verified updates, and optionally unconfirmed ones),
+bookmarks, tags, and weekly/monthly/yearly PDF compilations. Beige-and-navy theme,
+light and dark, in English and Amharic.
 
 ```
 lexet/
@@ -17,12 +27,13 @@ lexet/
 │   ├── lexet/static_feed.py  the feed the app reads, as static files (GitHub Pages) — also served by the API
 │   ├── lexet/api/         HTTP API (feed, status page, assisted-ingestion admin endpoint)
 │   ├── lexet/push.py      FCM data-only "tickles"
-│   └── tests/             75 tests (text, adapters with mocked HTTP, full pipeline, API, static feed) + demo data
+│   └── tests/             79 tests (text, adapters incl. aggregators, full pipeline, API, static feed) + demo data
 ├── android/            Kotlin 2.1 · Jetpack Compose (Material 3) · Room (FTS4) · WorkManager · DataStore · OkHttp
 │   ├── domain/            pure-Kotlin core shared logic (17 tests) — normalisation, calendar, filters, digest, 10:1 feed mix, reports
 │   ├── app/               the Android app
 │   └── tools/sdkless/     verification that runs without the Android SDK
 ├── .github/workflows/  feed.yml: the server, run free every 30 min, published to GitHub Pages
+│                       sources.yml: checks every source from GitHub's machines (robots, yield)
 │                       build.yml: tests + APK build (Release with APKs on version tags)
 ├── shared/
 │   ├── taxonomy.json        codes + English/Amharic labels used by both sides
@@ -103,11 +114,12 @@ Before installing on a phone:
 
 | Part | Status |
 |---|---|
-| Backend (extraction, calendar, verification, clustering, adapters, API, static feed) | 75 automated tests pass, including a simulated phone syncing the static feed (snapshot, segments, deletions, epoch reset) |
+| Backend (extraction, calendar, verification, clustering, adapters, API, static feed) | 79 automated tests pass, including a simulated phone syncing the static feed (snapshot, segments, deletions, epoch reset) |
 | Domain module (Amharic normalisation, calendar, filters, digest, feed mix, reports) | Compiled with Kotlin 2.1.20; 17 tests pass, including the vectors shared with the backend |
 | App search/archive SQL | Generated queries run against an SQLite copy of the Room schema (FTS4): 15/15 pass; `ArchiveQueryTest` covers the same in the app module |
 | Android app build | Compiles with no errors or warnings (AGP 8.10.1, Kotlin 2.1.20, compile/target SDK 36, min SDK 26). `assembleDebug` and `assembleRelease` (R8 minified, lint-vital checked) produce installable APKs: release ≈ 2 MB, debug ≈ 13 MB |
 | App sync against the feed | `FeedSyncTest` syncs the app's real database against feed files exported by the backend from the demo data: snapshot on first install, only the changed segment afterwards, index-only when nothing changed, reset on a new epoch, a clear error for an address without a feed |
+| Sharing and theme | `ShareTest` shares a LinkedIn post into the app and checks it is saved with its law number detected; `DarkThemeTest` renders the navy theme; saved posts survive a feed reset (`FeedSyncTest`) |
 | App running end to end | `AppSmokeTest` (Robolectric, simulated Android 14) starts the real app with the backend's demo data and checks every screen: feed with verified/unconfirmed and international items; detail with both law-ID calendars and source counting reasons; Amharic and E.C. law-ID search; saved; reports; settings. Screenshots of each screen and of every compiled report page are written to `android/app/build/screenshots/`. The PDF container step is skipped there because Robolectric has no native PDF backend; phones do |
 | On a physical phone | Not yet: the build machine has no emulator. Install the APK and try it against the demo backend (`docs/OPERATIONS.md` → *Local demo*) |
 | Live crawling of Ethiopian sites | Not exercised from the build environment (network allowlist). `lexet doctor` checks every source after deployment |
