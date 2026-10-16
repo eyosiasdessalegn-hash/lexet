@@ -1,0 +1,35 @@
+# Checks every monitored source from GitHub's machines: robots.txt permission, what each
+# listing or feed returns, and how many legal items it yields. Results appear on the run page.
+# Run it after adding sources or when a source stops yielding: Actions › Check sources › Run workflow.
+name: Check sources
+
+on:
+  workflow_dispatch:
+    inputs:
+      source:
+        description: "Only these source ids (space-separated); empty = all"
+        required: false
+
+permissions:
+  contents: read
+
+jobs:
+  doctor:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    env:
+      LEXET_TAXONOMY: ${{ github.workspace }}/shared/taxonomy.json
+      LEXET_USER_AGENT: "AristophanesBot/0.3 (+https://github.com/${{ github.repository }}; Ethiopian legal-news aggregator)"
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with:
+          python-version: "3.12"
+          cache: pip
+          cache-dependency-path: backend/pyproject.toml
+      - run: pip install ./backend
+      - name: Check sources
+        env:
+          ONLY: ${{ inputs.source }}
+        run: |
+          if [ -n "$ONLY" ]; then lexet doctor --limit 5 --source $ONLY; else lexet doctor --limit 5; fi

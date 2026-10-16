@@ -164,11 +164,13 @@ class Pipeline:
             return None
         lang = raw.lang if raw.lang in ("en", "am") else ethiopic.detect_lang(f"{title} {text[:2000]}")
         extra = {"doc_type_hint": raw.doc_type_hint, "issuer_hint": raw.issuer_hint, **(raw.extra or {})}
+        publisher = raw.publisher or d.publisher
+        tier = raw.tier if raw.tier is not None else d.tier
         fields = dict(
-            source_id=d.id, publisher=d.publisher, tier=d.tier, title=title, lang=lang,
+            source_id=d.id, publisher=publisher, tier=tier, title=title, lang=lang,
             published_at=raw.published_at, content_hash=h, text=text,
             shingles_json=json.dumps(similarity.shingles(f"{title} {text}")),
-            attribution=classify.detect_attribution(text or title, self.aliases, d.publisher),
+            attribution=classify.detect_attribution(text or title, self.aliases, publisher),
             is_primary_document=raw.is_primary_document,
             gazette=raw.gazette or (raw.is_primary_document and looks_like_gazette(text)),
             status_hint=raw.status_hint, extra_json=json.dumps(extra, ensure_ascii=False), processed=False,

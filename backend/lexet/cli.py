@@ -158,14 +158,27 @@ def cmd_doctor(args, settings):
                 status, err = "ERROR", f"{type(e).__name__}: {e}"
             if status == "ok" and ctx.stats["requests"] and ctx.stats["errors"] == ctx.stats["requests"]:
                 status = "UNREACHABLE"
-            rows.append((d.id, d.tier, status, n, ctx.stats["requests"], err))
+            if status == "ok" and n == 0:
+                status = "NO-LEGAL-ITEMS" if ctx.stats["seen"] else "NOTHING-FOUND"
+            rows.append((d.id, d.tier, status, n, ctx.stats["requests"], err, ctx))
         await fetcher.aclose()
         return rows
 
     rows = asyncio.run(check())
-    print(f"{'source':<16} {'tier':>4}  {'status':<18} {'legal items':>11} {'requests':>8}  note")
-    for sid, tier, status, n, req, err in rows:
-        print(f"{sid:<16} {tier:>4}  {status:<18} {n:>11} {req:>8}  {err[:80]}")
+    print(f"{'source':<18} {'tier':>4}  {'status':<18} {'legal items':>11} {'requests':>8}  note")
+    detail = []
+    for sid, tier, status, n, req, err, ctx in rows:
+        print(f"{sid:<18} {tier:>4}  {status:<18} {n:>11} {req:>8}  {err[:80]}")
+        line = f"{sid} [t{tier}] {status} legal={n} seen={ctx.stats['seen']} req={req}"
+        if err:
+            line += f" | {err[:120]}"
+        if ctx.trace:
+            line += " | http: " + " ; ".join(ctx.trace)
+        if ctx.samples:
+            line += " | e.g. " + " ; ".join(ctx.samples)
+        detail.append(line)
+    ok = sum(1 for r in rows if r[2] == "ok")
+    _gh("notice", f"Source check: {ok}/{len(rows)} sources yielding legal items", "\n".join(detail))
 
 
 def cmd_submit(args, settings):

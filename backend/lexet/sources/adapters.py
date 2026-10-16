@@ -48,11 +48,16 @@ async def _safe_get(ctx: AdapterContext, url: str, **kw):
     except RobotsDisallowed:
         ctx.stats["blocked_by_robots"] += 1
         raise
-    except httpx.HTTPError:
+    except httpx.HTTPError as e:
         ctx.stats["errors"] += 1
+        if len(ctx.trace) < 4:
+            ctx.trace.append(f"ERR {type(e).__name__} {url[:100]}")
         return None
     if r.not_modified:
         ctx.stats["not_modified"] += 1
+    if len(ctx.trace) < 4:
+        ctype = (r.headers.get("content-type", "") or "").split(";")[0]
+        ctx.trace.append(f"{r.status} {ctype} {len(r.content)}B {url[:100]}")
     return r
 
 
@@ -101,10 +106,12 @@ class WordPressAdapter:
                 when = parse_date(p.get("date_gmt"))
                 if when and _iso(when) > newest:
                     newest = _iso(when)
+                ctx.stats["seen"] += 1
                 if not link or ctx.is_known(link):
                     ctx.stats["skipped_known"] += 1
                     continue
                 if self.require_legal and not looks_legal(f"{title} {excerpt}"):
+                    ctx.sample(title)
                     continue
                 ctx.stats["candidates"] += 1
                 full = await _safe_get(ctx, f"{self.base}/wp-json/wp/v2/posts/{p['id']}?_fields=content",
@@ -127,11 +134,12 @@ class WordPressAdapter:
 
 class RssAdapter:
     def __init__(self, feed_url: str, fetch_full: bool = False, require_legal: bool = True,
-                 keywords: list[str] | None = None):
+                 keywords: list[str] | None = None, per_item_publisher: bool = False):
         self.feed_url = feed_url
         self.fetch_full = fetch_full
         self.require_legal = require_legal
         self.keywords = [k.lower() for k in (keywords or [])]
+        self.per_item_publisher = per_item_publisher   # Google News: <source url="…">Outlet</source>
 
     async def discover(self, ctx: AdapterContext) -> AsyncIterator[RawObservation]:
         r = await _safe_get(ctx, self.feed_url, accept="application/rss+xml, application/atom+xml, */*")
@@ -150,13 +158,16 @@ class RssAdapter:
                     break
             if when and _iso(when) > newest:
                 newest = _iso(when)
+            ctx.stats["seen"] += 1
             if not link or ctx.is_known(link):
                 ctx.stats["skipped_known"] += 1
                 continue
             hay = f"{title} {summary}"
             if self.keywords and not any(k in hay.lower() for k in self.keywords):
+                ctx.sample(title)
                 continue
             if self.require_legal and not looks_legal(hay):
+                ctx.sample(title)
                 continue
             ctx.stats["candidates"] += 1
             text = summary
@@ -167,8 +178,13 @@ class RssAdapter:
                     text = art.text or summary
                     when = when or art.published_at
             ctx.stats["emitted"] += 1
+            publisher, tier = (None, None)
+            if self.per_item_publisher:
+                src = e.get("source") or {}
+                publisher, tier = publisher_for(src.get("href") or "", src.get("title") or "")
             yield RawObservation(url=link, title=title, text=text, published_at=when,
-                                 lang=ethiopic.detect_lang(title + " " + text[:1000]), **_hints(ctx))
+                                 lang=ethiopic.detect_lang(title + " " + text[:1000]), publisher=publisher,
+                                 tier=tier, **_hints(ctx))
         ctx.new_cursor = newest
 
 
@@ -216,11 +232,13 @@ class HtmlListingAdapter:
                     if link.url in seen:
                         continue
                     seen.add(link.url)
+                    ctx.stats["seen"] += 1
                     if self.link_re and not self.link_re.search(link.url):
                         continue
                     label = f"{link.text} {link.context}"
                     refs = lawid.find_law_refs(label)
                     if not refs and not _DOC_WORDS.search(label):
+                        ctx.sample(f"{link.text[:40]} <{urlsplit(link.url).path[:45]}>")
                         continue
                     if urlsplit(link.url).netloc != urlsplit(r.url).netloc and not link.url.lower().endswith(".pdf"):
                         continue
@@ -278,15 +296,22 @@ class HtmlArticlesAdapter:
             r = await _safe_get(ctx, listing)
             if r is None or r.not_modified or r.status != 200:
                 continue
-            for link in links_with_context(r.text, r.url):
+            links = list(links_with_context(r.text, r.url))
+            if not any(self.article_re.search(lk.url) for lk in links):
+                # Diagnostics: the article pattern matches nothing; show what links the page has.
+                for lk in links[:200:20]:
+                    ctx.sample(f"no match: {urlsplit(lk.url).path[:70]}")
+            for link in links:
                 if link.url in seen or not self.article_re.search(link.url):
                     continue
                 seen.add(link.url)
+                ctx.stats["seen"] += 1
                 if ctx.is_known(link.url):
                     ctx.stats["skipped_known"] += 1
                     continue
                 # Only open articles whose headline looks legal (saves requests).
                 if self.require_legal and not looks_legal(f"{link.text} {link.context}"):
+                    ctx.sample(link.text)
                     continue
                 if fetched >= self.max_articles:
                     return
@@ -301,6 +326,101 @@ class HtmlArticlesAdapter:
                                      published_at=art.published_at, lang=art.lang, **_hints(ctx))
 
 
+# ============================================================== aggregators
+
+def _site(host_or_url: str) -> str:
+    """'https://eng.addisstandard.com/x' → 'addisstandard.com'; 'www.justice.gov.et' → 'justice.gov.et'."""
+    host = urlsplit(host_or_url).netloc if "//" in host_or_url else host_or_url
+    labels = [x for x in host.lower().split(":")[0].split(".") if x]
+    if len(labels) >= 3 and len(labels[-1]) == 2 and labels[-2] in ("gov", "com", "org", "edu", "co", "net", "ac"):
+        return ".".join(labels[-3:])
+    return ".".join(labels[-2:])
+
+
+_KNOWN_SITES: dict[str, tuple[str, int]] | None = None
+
+
+def publisher_for(host_or_url: str, name: str = "") -> tuple[str | None, int | None]:
+    """Publisher and tier for an article an aggregator found. Outlets we also crawl
+    directly keep their own publisher (so ENA via Google News is still ENA); any
+    other outlet is its own publisher at tier 4 ("other outlet")."""
+    global _KNOWN_SITES
+    if _KNOWN_SITES is None:
+        from . import catalog
+        _KNOWN_SITES = {}
+        for d in catalog.SOURCES:
+            c = d.config
+            for u in [c.get("base_url"), c.get("feed_url"), *(c.get("listing_urls") or [])]:
+                if u and d.kind not in ("gdelt",) and not c.get("per_item_publisher"):
+                    _KNOWN_SITES.setdefault(_site(u), (d.publisher, d.tier))
+    site = _site(host_or_url) if host_or_url else ""
+    if not site:
+        return (name.strip()[:60] or None), 4
+    return _KNOWN_SITES.get(site, (site, 4))
+
+
+class GdeltAdapter:
+    """GDELT DOC 2.0 API: worldwide news, searched by keyword, updated every 15 minutes.
+
+    Free and meant for programmatic use. Gives headlines and links (no text), so the
+    first `fetch_full` new articles are opened, robots.txt permitting, for their text.
+    """
+    API = "https://api.gdeltproject.org/api/v2/doc/doc"
+    _LANG = {"English": "en", "Amharic": "am"}
+
+    def __init__(self, query: str, max_records: int = 75, timespan: str = "3d", fetch_full: int = 12,
+                 require_legal: bool = True):
+        self.query, self.max_records, self.timespan = query, max_records, timespan
+        self.fetch_full, self.require_legal = fetch_full, require_legal
+
+    async def discover(self, ctx: AdapterContext) -> AsyncIterator[RawObservation]:
+        q = urlencode({"query": self.query, "mode": "artlist", "format": "json", "maxrecords": self.max_records,
+                       "timespan": self.timespan, "sort": "datedesc"})
+        r = await _safe_get(ctx, f"{self.API}?{q}", conditional=False, accept="application/json")
+        if r is None or r.status != 200:
+            return
+        try:
+            articles = json.loads(r.text).get("articles", [])
+        except ValueError:
+            ctx.stats["errors"] += 1
+            ctx.sample("not JSON: " + r.text[:70])
+            return
+        opened = 0
+        for a in articles:
+            ctx.stats["seen"] += 1
+            url, title = a.get("url"), _strip_html(a.get("title") or "")
+            if not url or not title:
+                continue
+            if ctx.is_known(url):
+                ctx.stats["skipped_known"] += 1
+                continue
+            if self.require_legal and not looks_legal(title):
+                ctx.sample(title)
+                continue
+            ctx.stats["candidates"] += 1
+            when = None
+            try:
+                when = dt.datetime.strptime(a.get("seendate", ""), "%Y%m%dT%H%M%SZ")
+            except ValueError:
+                pass
+            text = title
+            if opened < self.fetch_full:
+                opened += 1
+                try:
+                    page = await _safe_get(ctx, url, conditional=False)
+                except RobotsDisallowed:
+                    page = None   # that outlet does not allow crawlers: keep the headline only
+                if page is not None and page.status == 200 and "html" in page.headers.get("content-type", ""):
+                    art = extract_article(page.text, url)
+                    text = art.text or title
+                    when = when or art.published_at
+            publisher, tier = publisher_for(a.get("domain") or url)
+            lang = self._LANG.get(a.get("language", "")) or ethiopic.detect_lang(title + " " + text[:1000])
+            ctx.stats["emitted"] += 1
+            yield RawObservation(url=url, title=title, text=text, published_at=when, lang=lang,
+                                 publisher=publisher, tier=tier, **_hints(ctx))
+
+
 # ============================================================== factory
 
 def build_adapter(kind: str, config: dict):
@@ -310,7 +430,12 @@ def build_adapter(kind: str, config: dict):
                                 require_legal=config.get("require_legal", True))
     if kind == "rss":
         return RssAdapter(config["feed_url"], fetch_full=config.get("fetch_full", False),
-                          require_legal=config.get("require_legal", True), keywords=config.get("keywords"))
+                          require_legal=config.get("require_legal", True), keywords=config.get("keywords"),
+                          per_item_publisher=config.get("per_item_publisher", False))
+    if kind == "gdelt":
+        return GdeltAdapter(config["query"], max_records=config.get("max_records", 75),
+                            timespan=config.get("timespan", "3d"), fetch_full=config.get("fetch_full", 12),
+                            require_legal=config.get("require_legal", True))
     if kind == "html_listing":
         return HtmlListingAdapter(config["listing_urls"], max_pages=config.get("max_pages", 3),
                                   page_param=config.get("page_param"), link_regex=config.get("link_regex"),

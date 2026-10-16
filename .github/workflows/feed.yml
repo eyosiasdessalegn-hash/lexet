@@ -66,7 +66,7 @@ jobs:
     env:
       LEXET_DATABASE_URL: sqlite:///${{ github.workspace }}/state/lexet.db
       LEXET_TAXONOMY: ${{ github.workspace }}/shared/taxonomy.json
-      LEXET_USER_AGENT: "LexETBot/0.2 (+https://github.com/${{ github.repository }}; Ethiopian legal-news aggregator)"
+      LEXET_USER_AGENT: "AristophanesBot/0.3 (+https://github.com/${{ github.repository }}; Ethiopian legal-news aggregator)"
     steps:
       - uses: actions/checkout@v7
 

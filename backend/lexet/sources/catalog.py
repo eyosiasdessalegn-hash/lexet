@@ -3,8 +3,13 @@
 Tiers (used by the verification rule, docs/VERIFICATION.md):
   1  Official government publication (Negarit Gazeta, MoJ, HoPR, regulators)
   2  Official news agency (ENA)
-  3  Reputable independent legal / business press
+  3  Established Ethiopian press (independent, state-affiliated and broadcasters)
+  4  Other outlets: blogs, smaller sites, and outlets found through aggregators
   9  International / regional (secondary stream, not subject to the 3-source rule)
+
+Every tier is shown in the app; tiers 3–4 count as independent publishers but only
+tiers 1–2 can anchor verification. Aggregators (GDELT, Google News) name each
+article's own outlet, so independence is still counted per outlet.
 
 `publisher` is the unit of independence: two URLs from the same publisher (ENA
 English and ENA Amharic) count once. `aliases` are the names other outlets use
@@ -103,6 +108,91 @@ SOURCES: list[SourceDef] = [
         id="chilot", name="Chilot — Ethiopian legal information", publisher="CHILOT", tier=3,
         jurisdiction="ET", lang="mixed", kind="wordpress", interval_min=180,
         config={"base_url": "https://chilot.me"},
+    ),
+    SourceDef(
+        id="reporter_am", name="ሪፖርተር — The Reporter (Amharic)", publisher="REPORTER", tier=3,
+        jurisdiction="ET", lang="am", kind="wordpress", interval_min=30,
+        config={"base_url": "https://www.ethiopianreporter.com"}, aliases=["ሪፖርተር"],
+    ),
+    SourceDef(
+        id="fana_am", name="ፋና — Fana Media Corporation (Amharic)", publisher="FANA", tier=3,
+        jurisdiction="ET", lang="am", kind="wordpress", interval_min=30,
+        config={"base_url": "https://www.fanamc.com"}, aliases=["ፋና"],
+    ),
+    SourceDef(
+        id="walta", name="Walta Media and Communication", publisher="WALTA", tier=3,
+        jurisdiction="ET", lang="mixed", kind="wordpress", interval_min=30,
+        config={"base_url": "https://waltainfo.com"}, aliases=["Walta", "ዋልታ"],
+    ),
+    SourceDef(
+        id="press_et", name="Ethiopian Press Agency (The Ethiopian Herald, Addis Zemen)", publisher="EPA", tier=3,
+        jurisdiction="ET", lang="mixed", kind="wordpress", interval_min=60,
+        config={"base_url": "https://press.et"}, aliases=["The Ethiopian Herald", "Addis Zemen", "አዲስ ዘመን"],
+    ),
+    SourceDef(
+        id="ebr", name="Ethiopian Business Review", publisher="EBR", tier=3,
+        jurisdiction="ET", lang="en", kind="wordpress", interval_min=180,
+        config={"base_url": "https://ethiopianbusinessreview.net"},
+    ),
+    SourceDef(
+        id="bbc_amharic", name="BBC News አማርኛ", publisher="BBC", tier=3,
+        jurisdiction="ET", lang="am", kind="rss", interval_min=60,
+        config={"feed_url": "https://feeds.bbci.co.uk/amharic/rss.xml"},
+    ),
+    SourceDef(
+        id="dw_amharic", name="DW አማርኛ", publisher="DW", tier=3,
+        jurisdiction="ET", lang="am", kind="rss", interval_min=60,
+        config={"feed_url": "https://rss.dw.com/xml/rss-amh-all"},
+    ),
+    SourceDef(
+        id="borkena", name="Borkena", publisher="BORKENA", tier=4,
+        jurisdiction="ET", lang="en", kind="wordpress", interval_min=60,
+        config={"base_url": "https://borkena.com"},
+    ),
+    SourceDef(
+        id="ethiopia_insight", name="Ethiopia Insight", publisher="ETHIOPIA_INSIGHT", tier=4,
+        jurisdiction="ET", lang="en", kind="wordpress", interval_min=180,
+        config={"base_url": "https://www.ethiopia-insight.com"},
+    ),
+    SourceDef(
+        id="ethiopian_monitor", name="Ethiopian Monitor", publisher="ETHIOPIAN_MONITOR", tier=4,
+        jurisdiction="ET", lang="en", kind="wordpress", interval_min=60,
+        config={"base_url": "https://ethiopianmonitor.com"},
+    ),
+    SourceDef(
+        id="nbe", name="National Bank of Ethiopia", publisher="NBE", tier=1,
+        jurisdiction="ET", lang="mixed", kind="wordpress", interval_min=180,
+        config={"base_url": "https://nbe.gov.et", "issuer_hint": "NBE", "require_legal": False},
+        notes="Directives and circulars; news posts announce new directives.",
+    ),
+    SourceDef(
+        id="ecma", name="Ethiopian Capital Market Authority", publisher="ECMA", tier=1,
+        jurisdiction="ET", lang="mixed", kind="wordpress", interval_min=360,
+        config={"base_url": "https://ecma.gov.et", "require_legal": False},
+    ),
+    # ------------------------------------------------------------------ aggregators (many outlets)
+    SourceDef(
+        id="gdelt", name="GDELT — worldwide news about Ethiopian law", publisher="GDELT", tier=4,
+        jurisdiction="ET", lang="mixed", kind="gdelt", interval_min=30,
+        config={"query": 'Ethiopia (proclamation OR directive OR regulation OR legislation OR "draft law" '
+                         'OR parliament OR "Council of Ministers" OR court OR "new law")'},
+        notes="Each article keeps its own outlet as publisher.",
+    ),
+    SourceDef(
+        id="gnews_en", name="Google News — Ethiopian legal news (English)", publisher="GOOGLE_NEWS", tier=4,
+        jurisdiction="ET", lang="en", kind="rss", interval_min=30,
+        config={"feed_url": "https://news.google.com/rss/search?q=Ethiopia+(proclamation+OR+directive+OR+"
+                            "regulation+OR+%22draft+law%22+OR+parliament+OR+%22Council+of+Ministers%22)+when:3d"
+                            "&hl=en-US&gl=US&ceid=US:en",
+                "per_item_publisher": True},
+    ),
+    SourceDef(
+        id="gnews_am", name="Google News — የሕግ ዜና (Amharic)", publisher="GOOGLE_NEWS", tier=4,
+        jurisdiction="ET", lang="am", kind="rss", interval_min=60,
+        config={"feed_url": "https://news.google.com/rss/search?q=%E1%8A%A0%E1%8B%8B%E1%8C%85+OR+"
+                            "%E1%8B%B0%E1%8A%95%E1%89%A5+OR+%E1%88%98%E1%88%98%E1%88%AA%E1%8B%AB+when:3d"
+                            "&hl=am&gl=ET&ceid=ET:am",
+                "per_item_publisher": True},
     ),
     # ------------------------------------------------------------------ assisted ingestion
     SourceDef(
