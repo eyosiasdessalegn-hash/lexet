@@ -191,6 +191,7 @@ SOURCES: list[SourceDef] = [
                             "regulation+OR+%22draft+law%22+OR+parliament+OR+%22Council+of+Ministers%22)+when:3d"
                             "&hl=en-US&gl=US&ceid=US:en",
                 "per_item_publisher": True},
+        enabled=False,  # checked 16 Oct 2026: news.google.com robots.txt disallows crawlers
     ),
     SourceDef(
         id="gnews_am", name="Google News — የሕግ ዜና (Amharic)", publisher="GOOGLE_NEWS", tier=4,
@@ -199,6 +200,7 @@ SOURCES: list[SourceDef] = [
                             "%E1%8B%B0%E1%8A%95%E1%89%A5+OR+%E1%88%98%E1%88%98%E1%88%AA%E1%8B%AB+when:3d"
                             "&hl=am&gl=ET&ceid=ET:am",
                 "per_item_publisher": True},
+        enabled=False,  # checked 16 Oct 2026: news.google.com robots.txt disallows crawlers
     ),
     # ------------------------------------------------------------------ assisted ingestion
     SourceDef(

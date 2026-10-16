@@ -384,7 +384,7 @@ class GdeltAdapter:
         q = urlencode({"query": self.query, "mode": "artlist", "format": "json", "maxrecords": self.max_records,
                        "timespan": self.timespan, "sort": "datedesc"})
         r = await _safe_get(ctx, f"{self.API}?{q}", conditional=False, accept="application/json")
-        if r is None:   # GDELT drops connections when busy: one more try after its 5-second rule
+        if r is None or r.status == 429:   # busy or rate-limited: one more try after its 5-second rule
             await asyncio.sleep(6)
             r = await _safe_get(ctx, f"{self.API}?{q}", conditional=False, accept="application/json")
         if r is None or r.status != 200:
