@@ -104,7 +104,7 @@ data class FeedIndex(
     val sources: String = "sources.json",
 )
 
-/** The address answers, but not with a LexET feed this app can read. */
+/** The address answers, but not with a Aristophanes feed this app can read. */
 class FeedUnavailableException(message: String) : IOException(message)
 
 val LexetJson = Json {
@@ -114,8 +114,8 @@ val LexetJson = Json {
 }
 
 /**
- * Thin client for the LexET feed. The feed is a handful of JSON files — published
- * by a scheduled job to any static host (e.g. GitHub Pages) or served by the LexET
+ * Thin client for the Aristophanes feed. The feed is a handful of JSON files — published
+ * by a scheduled job to any static host (e.g. GitHub Pages) or served by the Aristophanes
  * server — so the app needs no account, device ID or cookies: it only downloads files.
  */
 class LexetApi(
@@ -134,7 +134,7 @@ class LexetApi(
             client.newCall(request).execute().use { r ->
                 when {
                     r.code == 404 && isIndex ->
-                        throw FeedUnavailableException("No LexET feed at ${target.substringBeforeLast("/feed/")}/ (HTTP 404)")
+                        throw FeedUnavailableException("No Aristophanes feed at ${target.substringBeforeLast("/feed/")}/ (HTTP 404)")
                     r.code == 404 -> throw IOException("The feed is being updated; trying again shortly")
                     !r.isSuccessful -> throw IOException("HTTP ${r.code} from $target")
                     else -> r.body?.string() ?: throw IOException("Empty response from $target")

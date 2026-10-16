@@ -294,7 +294,7 @@ private fun shareIntent(item: LegalItem, amharicFirst: Boolean): Intent {
             item.sources.filter { it.counted }.forEach { appendLine("• ${it.name}: ${it.url}") }
         }
         appendLine()
-        append("— LexET")
+        append("— Aristophanes")
     }
     return Intent(Intent.ACTION_SEND).apply {
         type = "text/plain"

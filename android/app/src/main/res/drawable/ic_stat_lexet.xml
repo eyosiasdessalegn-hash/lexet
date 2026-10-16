@@ -1,6 +1,13 @@
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="24dp" android:height="24dp" android:viewportWidth="24" android:viewportHeight="24"
     android:tint="#FFFFFF">
+    <!-- Notification icon: the Aristophanes column, as a white silhouette. -->
+    <path android:fillColor="#FFFFFFFF" android:pathData="M3.5,2.5h17v2h-17z"/>
+    <path android:fillColor="#FFFFFFFF" android:pathData="M5.5,4.5h13v2.5h-13z"/>
+    <path android:fillColor="#FFFFFFFF" android:pathData="M3.6,6.2a2,2 0,1 0,4 0a2,2 0,1 0,-4 0z"/>
+    <path android:fillColor="#FFFFFFFF" android:pathData="M16.4,6.2a2,2 0,1 0,4 0a2,2 0,1 0,-4 0z"/>
     <path android:fillColor="#FFFFFFFF" android:fillType="evenOdd"
-        android:pathData="M6,2h9l5,5v13c0,1.1 -0.9,2 -2,2H6c-1.1,0 -2,-0.9 -2,-2V4c0,-1.1 0.9,-2 2,-2zM14,3.5V8h4.5L14,3.5zM12.2,9.2c-1.6,0 -2.7,0.9 -2.7,2.1c0,0.6 0.3,1.1 0.8,1.4c-0.6,0.4 -1,1 -1,1.7c0,1.4 1.3,2 2.6,2.5c0.9,0.3 1.5,0.6 1.5,1.1c0,0.4 -0.4,0.7 -1.1,0.7c-0.8,0 -1.3,-0.3 -1.6,-0.9l-1.3,0.6c0.5,1 1.6,1.6 2.9,1.6c1.6,0 2.7,-0.8 2.7,-2c0,-0.6 -0.3,-1.1 -0.8,-1.4c0.6,-0.4 1,-1 1,-1.7c0,-1.4 -1.3,-2 -2.6,-2.5c-0.9,-0.3 -1.5,-0.6 -1.5,-1.1c0,-0.4 0.4,-0.7 1.1,-0.7c0.8,0 1.3,0.3 1.6,0.9l1.3,-0.6C14.6,9.8 13.5,9.2 12.2,9.2zM11.5,13.3c0.3,0.1 0.6,0.3 0.9,0.4c0.6,0.2 1.1,0.5 1.1,0.9c0,0.3 -0.2,0.6 -0.5,0.8c-0.3,-0.1 -0.6,-0.3 -0.9,-0.4c-0.6,-0.2 -1.1,-0.5 -1.1,-0.9C11,13.8 11.2,13.5 11.5,13.3z"/>
+        android:pathData="M7,8.5h10v10h-10zM9.2,9.5h0.9v8h-0.9zM11.55,9.5h0.9v8h-0.9zM13.9,9.5h0.9v8h-0.9z"/>
+    <path android:fillColor="#FFFFFFFF" android:pathData="M5.5,18.5h13v1.5h-13z"/>
+    <path android:fillColor="#FFFFFFFF" android:pathData="M3.5,20h17v2h-17z"/>
 </vector>

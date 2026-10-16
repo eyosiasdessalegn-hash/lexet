@@ -65,10 +65,10 @@
     <!-- Feed -->
     <string name="feed_empty_title">እስካሁን ምንም የለም</string>
     <string name="feed_empty_body">መተግበሪያው ከአገልጋዩ ጋር ሲመሳሰል አዳዲስ የሕግ ለውጦች እዚህ ይታያሉ።</string>
-    <string name="feed_setup_title">የLexET ምንጭዎን ይምረጡ</string>
-    <string name="feed_setup_body">LexET የተረጋገጡ የሕግ መረጃዎችን የሚያገኘው ከLexET ምንጭ ነው። የምንጩን አድራሻ በቅንብሮች › አገልጋይ ውስጥ ያስገቡ፤ ለምሳሌ yourname.github.io/lexet</string>
+    <string name="feed_setup_title">የሕግ መረጃ ምንጭዎን ይምረጡ</string>
+    <string name="feed_setup_body">Aristophanes የሕግ መረጃዎችን የሚያገኘው እርስዎ ከሚመርጡት ምንጭ ነው። የምንጩን አድራሻ በቅንብሮች › አገልጋይ ውስጥ ያስገቡ፤ ለምሳሌ yourname.github.io/lexet</string>
     <string name="feed_no_server_title">ከአገልጋዩ ጋር መገናኘት አልተቻለም</string>
-    <string name="feed_no_server_body">በ%1$s የLexET ምንጭ ማግኘት አልተቻለም። በቅንብሮች › አገልጋይ ያለውን አድራሻ እና የኢንተርኔት ግንኙነትዎን ያረጋግጡ።</string>
+    <string name="feed_no_server_body">በ%1$s የAristophanes ምንጭ ማግኘት አልተቻለም። በቅንብሮች › አገልጋይ ያለውን አድራሻ እና የኢንተርኔት ግንኙነትዎን ያረጋግጡ።</string>
     <string name="perm_title">ማሳወቂያዎችን ይፍቀዱ</string>
     <string name="perm_body">አዳዲስ የተረጋገጡ አዋጆች፣ ደንቦችና መመሪያዎች ሲወጡ በመቆለፊያ ማያ ገጹ ላይም ጭምር እንዲያውቁ። የትኞቹ እንደሚያሳውቁ በቅንብሮች ውስጥ ይምረጡ።</string>
     <string name="sync_never">ገና አልተመሳሰለም</string>
@@ -180,7 +180,7 @@
     <string name="set_title_language">የርዕስ ቋንቋ</string>
     <string name="lang_amharic_first">አማርኛ መጀመሪያ</string>
     <string name="lang_english_first">እንግሊዝኛ መጀመሪያ</string>
-    <string name="set_ui_language_hint">የመተግበሪያውን ቋንቋ ለመቀየር የስልክዎን ቅንብሮች › መተግበሪያዎች › LexET › ቋንቋ ይጠቀሙ።</string>
+    <string name="set_ui_language_hint">የመተግበሪያውን ቋንቋ ለመቀየር የስልክዎን ቅንብሮች › መተግበሪያዎች › Aristophanes › ቋንቋ ይጠቀሙ።</string>
     <string name="set_dates">ቀናት</string>
     <string name="dates_both">ሁለቱም</string>
     <string name="dates_gregorian">ግሪጎሪያን (እ.ኤ.አ)</string>
@@ -208,7 +208,7 @@
     <string name="set_sources">የሚከታተሉ ምንጮች</string>
     <string name="set_sources_desc">የምንጭ ደረጃዎችና የክትትል ሁኔታ</string>
     <string name="set_server">አገልጋይ</string>
-    <string name="server_help">የLexET ምንጭዎ አድራሻ፤ ለምሳሌ yourname.github.io/lexet ወይም የአገልጋይዎ https አድራሻ። መቀየር በመሣሪያው ያለውን ማህደር ያጠፋና እንደገና ያወርዳል።</string>
+    <string name="server_help">የAristophanes ምንጭዎ አድራሻ፤ ለምሳሌ yourname.github.io/lexet ወይም የአገልጋይዎ https አድራሻ። መቀየር በመሣሪያው ያለውን ማህደር ያጠፋና እንደገና ያወርዳል።</string>
     <string name="server_not_set">አልተዘጋጀም</string>
     <string name="privacy_text">ግላዊነት፦ መለያ አያስፈልግም፤ ስም፣ ኢሜል ወይም የመሣሪያ መለያ አይሰበሰብም። ማጣሪያዎች፣ ዕልባቶች፣ መለያዎችና ማስታወሻዎች በዚህ መሣሪያ ላይ ብቻ ይቀመጣሉ። አገልጋዩ የሚቀበለው የመጨረሻውን የማመሳሰያ ቁጥር ብቻ ነው። ፑሽ ሲበራ Google Firebase አንድ ስም-አልባ የርዕስ ምዝገባ ይጠቀማል።</string>
     <string name="verification_rule_text">የማረጋገጫ ደንብ፦ አንድ የኢትዮጵያ ሕግ ለውጥ «የተረጋገጠ» የሚባለው ቢያንስ ሦስት ገለልተኛ አሳታሚዎች ሲዘግቡት ነው፤ ከነዚህም አንዱ ይፋዊ የመንግሥት ምንጭ (ነጋሪት ጋዜጣ፣ ሚኒስቴር፣ ምክር ቤት) ወይም ኢዜአ መሆን አለበት። ያልተረጋገጡ አይደበቁም፤ ምልክት ይደረግባቸዋል እንጂ ማሳወቂያ አይልኩም።</string>

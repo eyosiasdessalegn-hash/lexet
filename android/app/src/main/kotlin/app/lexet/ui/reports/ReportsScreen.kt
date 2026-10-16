@@ -176,7 +176,7 @@ fun ReportsScreen(onView: (String) -> Unit) {
                             style = MaterialTheme.typography.labelMedium, color = MaterialTheme.colorScheme.onSurfaceVariant)
                         Row(verticalAlignment = Alignment.CenterVertically) {
                             TextButton(onClick = { openPdf(context, File(r.filePath)) }) { Text(stringResource(R.string.action_open_pdf)) }
-                            TextButton(onClick = { saving = r; saver.launch("LexET-${r.key}.pdf") }) { Text(stringResource(R.string.action_save_pdf)) }
+                            TextButton(onClick = { saving = r; saver.launch("Aristophanes-${r.key}.pdf") }) { Text(stringResource(R.string.action_save_pdf)) }
                             IconButton(onClick = { sharePdf(context, File(r.filePath), r.label) }) {
                                 Icon(Icons.Filled.Share, stringResource(R.string.action_share))
                             }

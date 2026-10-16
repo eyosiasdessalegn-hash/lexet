@@ -126,7 +126,7 @@ def test_cli_export_writes_site_and_removes_stale_files(tmp_path, monkeypatch):
     assert (out / "feed" / index["snapshot"]["file"]).exists()
     assert all((out / "feed" / s["file"]).exists() for s in index["segments"])
     assert not old.exists() and recent.exists()      # older files linger for an hour, for CDN caches
-    assert (out / ".nojekyll").exists() and "LexET feed" in (out / "index.html").read_text()
+    assert (out / ".nojekyll").exists() and "Aristophanes" in (out / "index.html").read_text()
     epoch = index["epoch"]
     cli.main(["export", "--out", str(out)])
     assert json.loads((out / "feed" / "index.json").read_text())["epoch"] == epoch

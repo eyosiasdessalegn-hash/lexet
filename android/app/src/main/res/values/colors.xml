@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="brand">#0B5D52</color>
-    <color name="ic_launcher_background">#0B5D52</color>
-    <color name="window_light">#FAFAF7</color>
-    <color name="window_dark">#111413</color>
+    <color name="brand">#1B2A4A</color>
+    <color name="ic_launcher_background">#1B2A4A</color>
+    <color name="window_light">#F6F0E3</color>
+    <color name="window_dark">#0E1626</color>
 </resources>

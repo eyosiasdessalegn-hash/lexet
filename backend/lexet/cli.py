@@ -59,10 +59,27 @@ def cmd_export(args, settings):
 
 
 def _gh(kind: str, title: str, text: str):
-    """GitHub Actions annotation (shown on the run page; readable through the API)."""
-    if os.environ.get("GITHUB_ACTIONS") == "true":
-        body = text[-30000:].replace("%", "%25").replace("\r", "").replace("\n", "%0A")
-        print(f"::{kind} title={title}::{body}", flush=True)
+    """GitHub Actions annotations (shown on the run page; readable through the API).
+
+    GitHub keeps 4,096 characters per annotation and 10 per kind per step, so long
+    text is split by line into up to 10 parts.
+    """
+    if os.environ.get("GITHUB_ACTIONS") != "true":
+        return
+    parts, cur = [], ""
+    for line in text.splitlines() or [""]:
+        line = line[:1000]
+        if cur and len(cur) + len(line) + 1 > 3800:
+            parts.append(cur)
+            cur = ""
+        cur = f"{cur}\n{line}" if cur else line
+    parts.append(cur)
+    if len(parts) > 10:   # tracebacks: the end matters most
+        parts = parts[-10:]
+    for i, part in enumerate(parts, 1):
+        body = part.replace("%", "%25").replace("\r", "").replace("\n", "%0A")
+        suffix = f" ({i}/{len(parts)})" if len(parts) > 1 else ""
+        print(f"::{kind} title={title}{suffix}::{body}", flush=True)
 
 
 def cmd_publish(args, settings):
@@ -171,11 +188,11 @@ def cmd_doctor(args, settings):
         print(f"{sid:<18} {tier:>4}  {status:<18} {n:>11} {req:>8}  {err[:80]}")
         line = f"{sid} [t{tier}] {status} legal={n} seen={ctx.stats['seen']} req={req}"
         if err:
-            line += f" | {err[:120]}"
+            line += f" | {err[:100]}"
         if ctx.trace:
-            line += " | http: " + " ; ".join(ctx.trace)
+            line += " | http: " + " ; ".join(t[:80] for t in ctx.trace[:2])
         if ctx.samples:
-            line += " | e.g. " + " ; ".join(ctx.samples)
+            line += " | e.g. " + " ; ".join(x[:60] for x in ctx.samples[:4])
         detail.append(line)
     ok = sum(1 for r in rows if r[2] == "ok")
     _gh("notice", f"Source check: {ok}/{len(rows)} sources yielding legal items", "\n".join(detail))

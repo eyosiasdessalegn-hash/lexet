@@ -159,12 +159,12 @@ def status_page(index: dict, items: list[Item], sources: list[dict]) -> str:
         f"<td class='err'>{e((s['last_error'] or '')[:90])}</td></tr>" for s in sources if s["kind"] != "manual")
     return f"""<!doctype html>
 <html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>LexET feed</title><meta name="robots" content="noindex">
+<title>Aristophanes feed</title><meta name="robots" content="noindex">
 <style>
-:root{{--bg:#fbfcfb;--fg:#1b1d1c;--muted:#5f6368;--brand:#0b5d52;--line:#e2e6e4;--ok:#1e7a46;--warn:#9a6200}}
-@media (prefers-color-scheme:dark){{:root{{--bg:#121514;--fg:#e4e8e6;--muted:#9aa29f;--brand:#7fd3c3;--line:#2a302e;--ok:#7bd69c;--warn:#f0b35a}}}}
+:root{{--bg:#f6f0e3;--fg:#1a2238;--muted:#5d5a52;--brand:#1b2a4a;--line:#e0d5bd;--ok:#2e6b45;--warn:#94600a}}
+@media (prefers-color-scheme:dark){{:root{{--bg:#0e1626;--fg:#eee6d3;--muted:#b3ac9c;--brand:#e8d9b5;--line:#26324e;--ok:#9ed3ae;--warn:#f0c070}}}}
 body{{margin:0;background:var(--bg);color:var(--fg);font:15px/1.45 system-ui,'Noto Sans Ethiopic',sans-serif}}
-main{{max-width:760px;margin:0 auto;padding:20px 16px 48px}}h1{{color:var(--brand);margin:0 0 4px}}
+main{{max-width:760px;margin:0 auto;padding:20px 16px 48px}}h1{{color:var(--brand);margin:0 0 4px;font-family:Georgia,'Times New Roman',serif;letter-spacing:.5px}}
 .lead{{color:var(--muted);margin:0 0 18px}}.stats{{display:flex;gap:10px;flex-wrap:wrap;margin:0 0 20px}}
 .stats div{{border:1px solid var(--line);border-radius:10px;padding:8px 12px}}.stats b{{display:block;font-size:20px}}
 ul{{list-style:none;padding:0;margin:0}}li{{border-top:1px solid var(--line);padding:10px 0}}
@@ -174,9 +174,9 @@ h2{{font-size:16px;margin:28px 0 8px;color:var(--brand)}}.wrap{{overflow-x:auto}
 table{{border-collapse:collapse;width:100%;font-size:13px}}td,th{{text-align:left;padding:6px 8px;border-top:1px solid var(--line);vertical-align:top}}
 .err{{color:var(--muted)}}code{{background:var(--line);padding:1px 5px;border-radius:4px}}
 </style></head><body><main>
-<h1>LexET feed</h1>
-<p class="lead">Ethiopian legal developments, corroborated across independent sources. Updated {e(_when(index['generated_at']))} UTC
-· data version {index['version']}. To use it, enter this page's address in the LexET app under <b>Settings › Server</b>.</p>
+<h1>Aristophanes</h1>
+<p class="lead">Ethiopian legal developments from official, press and other sources, each labelled by how many independent outlets confirm it. Updated {e(_when(index['generated_at']))} UTC
+· data version {index['version']}. To use it, enter this page's address in the Aristophanes app under <b>Settings › Server</b>.</p>
 <div class="stats"><div><b>{len(et)}</b>Ethiopian items</div><div><b>{counts.get('verified', 0)}</b>verified</div>
 <div><b>{counts.get('unconfirmed', 0)}</b>unconfirmed</div><div><b>{len(items) - len(et)}</b>international</div></div>
 <h2>Latest</h2><ul>{''.join(rows) or '<li>No items yet. The first crawl may take a few runs.</li>'}</ul>

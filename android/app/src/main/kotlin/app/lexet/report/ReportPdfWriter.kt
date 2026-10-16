@@ -37,7 +37,7 @@ class ReportPdfWriter(private val context: Context, private val taxonomy: Taxono
     private val footerH = 26f
     private val contentW = (pageW - 2 * margin).toInt()
     private val bottom = pageH - margin - footerH
-    private val brand = Color.rgb(0x0B, 0x5D, 0x52)
+    private val brand = Color.rgb(0x1B, 0x2A, 0x4A)   // Aristophanes navy
     private val muted = Color.rgb(0x5F, 0x63, 0x68)
 
     private fun paint(size: Float, bold: Boolean = false, color: Int = Color.BLACK) = TextPaint(Paint.ANTI_ALIAS_FLAG).apply {
@@ -126,7 +126,7 @@ class ReportPdfWriter(private val context: Context, private val taxonomy: Taxono
 
     private fun coverParas(r: Report, am: Boolean): List<Para> {
         val out = ArrayList<Para>()
-        out += para("LexET", pSmall, 0f)
+        out += para("Aristophanes", pSmall, 0f)
         out += para(s(R.string.pdf_title), pTitle, 6f)
         out += para(r.period.label(am), pH1, 14f)
         out += para(r.period.label(!am), pH2, 2f)
@@ -276,7 +276,7 @@ class ReportPdfWriter(private val context: Context, private val taxonomy: Taxono
         val p = Paint(pSmall).apply { textAlign = Paint.Align.LEFT }
         val y = pageH - margin + 6f
         c.drawLine(margin, y - 14f, pageW - margin, y - 14f, Paint().apply { color = Color.LTGRAY; strokeWidth = 0.5f })
-        c.drawText("LexET · ${r.period.label(am)}", margin, y, p)
+        c.drawText("Aristophanes · ${r.period.label(am)}", margin, y, p)
         p.textAlign = Paint.Align.RIGHT
         c.drawText(s(R.string.pdf_page, page, total), pageW - margin, y, p)
     }

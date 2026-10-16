@@ -51,7 +51,7 @@ class SyncWorker(context: Context, params: WorkerParameters) : CoroutineWorker(c
             SyncScheduler.scheduleCatchUp(applicationContext)
             if (runAttemptCount < 5) Result.retry() else Result.failure()
         } catch (e: SerializationException) {
-            Log.w("LexET", "unexpected server response", e)
+            Log.w("Aristophanes", "unexpected server response", e)
             c.settings.recordSyncError("unexpected server response")
             Result.failure()
         }
