@@ -126,6 +126,21 @@ def _publish(args, settings):
         "\n".join(lines) or "no source was due")
 
 
+def cmd_reprocess(args, settings):
+    """Run extraction again over Ethiopian reports that produced no item (after the
+    extraction rules improve). The next `publish` or `run` cycle picks them up."""
+    from sqlalchemy import select, update
+    from .models import Observation, Signal
+    p = _pipeline(settings)
+    et_sources = [d.id for d in p.sources.values() if d.jurisdiction == "ET"]
+    with p.sf() as s:
+        matched = select(Signal.observation_id)
+        r = s.execute(update(Observation).where(Observation.source_id.in_(et_sources), Observation.id.not_in(matched),
+                                                Observation.processed.is_(True)).values(processed=False))
+        s.commit()
+    print(f"{r.rowcount} reports queued for extraction")
+
+
 def cmd_tickle(args, settings):
     """Send the push "tickle" for a publish run, once its files are live."""
     from .push import Pusher
@@ -264,6 +279,9 @@ def main(argv=None):
     a = sub.add_parser("export", help="write the static feed from the database, without crawling")
     a.add_argument("--out", default="site")
     a.set_defaults(fn=cmd_export)
+
+    a = sub.add_parser("reprocess", help="re-run extraction over Ethiopian reports that produced no item")
+    a.set_defaults(fn=cmd_reprocess)
 
     a = sub.add_parser("tickle", help="send the push notification for a `publish --report` run")
     a.add_argument("--report", required=True)

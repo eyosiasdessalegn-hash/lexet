@@ -45,6 +45,10 @@ on:
       text:
         description: "Optional: first paragraph(s) of the text (helps matching and the summary)"
         required: false
+      reprocess:
+        description: "Re-read stored reports that produced no item (after extraction improvements)"
+        type: boolean
+        default: false
 
 permissions:
   contents: read
@@ -103,6 +107,10 @@ jobs:
           [ -n "$TEXT" ] && args+=(--text "$TEXT")
           [ "$GAZETTE" = "true" ] && args+=(--gazette)
           lexet "${args[@]}"
+
+      - name: Re-read unmatched reports
+        if: github.event_name == 'workflow_dispatch' && inputs.reprocess
+        run: lexet reprocess
 
       - name: Crawl, verify and build the feed
         run: |
