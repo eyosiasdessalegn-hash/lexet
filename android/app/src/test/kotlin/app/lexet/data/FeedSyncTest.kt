@@ -101,15 +101,17 @@ class FeedSyncTest {
         // 4. The feed was rebuilt (new epoch): start again from its snapshot.
         site = site.mapValues { (k, v) -> if (k == "/feed/index.json") v.replace(Regex("\"epoch\":\\d+"), "\"epoch\":7") else v }
         db.items().upsert(db.items().get(roads.id)!!.copy(id = "stale-item", ftsDocId = 9_999))
+        val clipId = repo.saveClip(app.lexet.domain.clip.ClipParser.parse("My notes https://www.linkedin.com/posts/x", null))
         requested.clear()
         repo.sync()
         assertEquals(listOf("/feed/index.json", "/feed/snapshot-1bec61ac8833.json"), requested)
         assertEquals(null, db.items().get("stale-item"))
-        assertEquals(7, db.items().count())
+        assertTrue(db.items().get(clipId) != null, "the user's saved posts survive a feed reset")
+        assertEquals(8, db.items().count())
 
         // 5. An address without a feed says so plainly.
         site = emptyMap()
         val e = assertFailsWith<FeedUnavailableException> { repo.sync() }
-        assertTrue("No LexET feed" in e.message!!)
+        assertTrue("No Aristophanes feed" in e.message!!)
     }
 }

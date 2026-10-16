@@ -38,9 +38,11 @@ data class NotificationFilters(
     val urgencies: Set<Urgency> = emptySet(),
     val digest: DigestMode = DigestMode.INSTANT,
     val showOnLockScreen: Boolean = true,
+    /** Also notify new items that fewer than three independent sources report (labelled Unconfirmed). */
+    val includeUnconfirmed: Boolean = true,
 )
 
-enum class ChangeKind { NEW_VERIFIED, STATUS_ADVANCED }
+enum class ChangeKind { NEW_VERIFIED, STATUS_ADVANCED, NEW_UNCONFIRMED }
 
 object NotificationRules {
 
@@ -53,10 +55,14 @@ object NotificationRules {
      * the stage stay silent. During the very first sync (bootstrap) nothing
      * notifies — the backlog is archive, not news.
      */
-    fun detectChange(previous: LegalItem?, current: LegalItem, bootstrap: Boolean): ChangeKind? {
+    fun detectChange(previous: LegalItem?, current: LegalItem, bootstrap: Boolean,
+                     includeUnconfirmed: Boolean = false): ChangeKind? {
         if (bootstrap) return null
         if (current.jurisdiction != Jurisdiction.ET) return null
-        if (current.verification != Verification.VERIFIED) return null
+        if (current.verification != Verification.VERIFIED) {
+            // Optional: a brand-new item that is not (yet) corroborated by three sources.
+            return if (includeUnconfirmed && previous == null) ChangeKind.NEW_UNCONFIRMED else null
+        }
         if (previous == null || previous.verification != Verification.VERIFIED) return ChangeKind.NEW_VERIFIED
         if (current.verifiedStatus.rankOrMinus() > previous.verifiedStatus.rankOrMinus()) return ChangeKind.STATUS_ADVANCED
         return null
@@ -111,6 +117,8 @@ object NotificationRules {
     fun statusPhrase(kind: ChangeKind, status: LegalStatus?, amharic: Boolean): String = when {
         kind == ChangeKind.NEW_VERIFIED && amharic -> "አዲስ የተረጋገጠ የሕግ ለውጥ"
         kind == ChangeKind.NEW_VERIFIED -> "New verified development"
+        kind == ChangeKind.NEW_UNCONFIRMED && amharic -> "አዲስ የሕግ መረጃ (ያልተረጋገጠ)"
+        kind == ChangeKind.NEW_UNCONFIRMED -> "New legal update (unconfirmed)"
         amharic -> when (status) {
             LegalStatus.APPROVED -> "ጸድቋል — በጋዜጣ የሚጠበቅ"
             LegalStatus.IN_FORCE -> "በሥራ ላይ ውሏል"

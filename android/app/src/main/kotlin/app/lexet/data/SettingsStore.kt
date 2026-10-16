@@ -64,6 +64,7 @@ class SettingsStore(private val context: Context) {
         val keywords = stringPreferencesKey("filter_keywords")
         val digest = stringPreferencesKey("digest_mode")
         val lockScreen = booleanPreferencesKey("lock_screen_content")
+        val includeUnconfirmed = booleanPreferencesKey("notify_unconfirmed")
         val titleLang = stringPreferencesKey("title_language")
         val dateDisplay = stringPreferencesKey("date_display")
         val theme = stringPreferencesKey("theme")
@@ -98,6 +99,7 @@ class SettingsStore(private val context: Context) {
                 urgencies = p[K.urgencies].orEmpty().mapNotNull { s -> Urgency.entries.firstOrNull { it.name == s } }.toSet(),
                 digest = enumOr(p[K.digest], DigestMode.INSTANT),
                 showOnLockScreen = p[K.lockScreen] ?: true,
+                includeUnconfirmed = p[K.includeUnconfirmed] ?: true,
             ),
             titleLanguage = enumOr(p[K.titleLang], d.titleLanguage),
             dateDisplay = enumOr(p[K.dateDisplay], d.dateDisplay),
@@ -132,6 +134,7 @@ class SettingsStore(private val context: Context) {
             p[K.keywords] = n.keywords.joinToString("\n")
             p[K.digest] = n.digest.name
             p[K.lockScreen] = n.showOnLockScreen
+            p[K.includeUnconfirmed] = n.includeUnconfirmed
             p[K.titleLang] = next.titleLanguage.name
             p[K.dateDisplay] = next.dateDisplay.name
             p[K.theme] = next.theme.name

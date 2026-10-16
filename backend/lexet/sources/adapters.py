@@ -12,6 +12,7 @@
 """
 from __future__ import annotations
 
+import asyncio
 import datetime as dt
 import json
 import re
@@ -296,7 +297,13 @@ class HtmlArticlesAdapter:
             r = await _safe_get(ctx, listing)
             if r is None or r.not_modified or r.status != 200:
                 continue
-            links = list(links_with_context(r.text, r.url))
+            # A story is often linked twice (picture, then headline): keep the most descriptive link per URL.
+            best: dict[str, object] = {}
+            for lk in links_with_context(r.text, r.url):
+                cur = best.get(lk.url)
+                if cur is None or len(lk.text) > len(cur.text):
+                    best[lk.url] = lk
+            links = list(best.values())
             if not any(self.article_re.search(lk.url) for lk in links):
                 # Diagnostics: the article pattern matches nothing; show what links the page has.
                 for lk in links[:200:20]:
@@ -377,6 +384,9 @@ class GdeltAdapter:
         q = urlencode({"query": self.query, "mode": "artlist", "format": "json", "maxrecords": self.max_records,
                        "timespan": self.timespan, "sort": "datedesc"})
         r = await _safe_get(ctx, f"{self.API}?{q}", conditional=False, accept="application/json")
+        if r is None:   # GDELT drops connections when busy: one more try after its 5-second rule
+            await asyncio.sleep(6)
+            r = await _safe_get(ctx, f"{self.API}?{q}", conditional=False, accept="application/json")
         if r is None or r.status != 200:
             return
         try:

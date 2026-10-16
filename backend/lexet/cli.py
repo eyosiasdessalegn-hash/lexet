@@ -67,9 +67,10 @@ def _gh(kind: str, title: str, text: str):
     if os.environ.get("GITHUB_ACTIONS") != "true":
         return
     parts, cur = [], ""
+    enc = lambda t: len(t.replace("%", "%25").replace("\n", "%0A"))  # noqa: E731
     for line in text.splitlines() or [""]:
-        line = line[:1000]
-        if cur and len(cur) + len(line) + 1 > 3800:
+        line = line[:900]
+        if cur and enc(cur) + enc(line) + 3 > 3900:
             parts.append(cur)
             cur = ""
         cur = f"{cur}\n{line}" if cur else line
@@ -158,7 +159,7 @@ def cmd_doctor(args, settings):
         fetcher = PoliteFetcher(settings)
         rows = []
         for d in catalog.SOURCES:
-            if d.kind == "manual" or (args.source and d.id not in args.source):
+            if d.kind == "manual" or (args.source and d.id not in args.source) or (not args.source and not d.enabled):
                 continue
             adapter = build_adapter(d.kind, d.config)
             ctx = AdapterContext(fetcher, d, None, lambda u: False)

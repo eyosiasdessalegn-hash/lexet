@@ -93,12 +93,14 @@ class Notifier(private val context: Context) {
         val phrase = NotificationRules.statusPhrase(kind, item.verifiedStatus ?: item.status, am)
         val title = item.title(am)
         val heading = listOfNotNull(if (am) item.lawIdAm ?: item.lawId else item.lawId, phrase).joinToString(" · ")
-        val sources = context.resources.getQuantityString(R.plurals.verified_by_sources, item.sourceCount, item.sourceCount)
+        val unconfirmed = kind == ChangeKind.NEW_UNCONFIRMED
+        val sources = context.resources.getQuantityString(
+            if (unconfirmed) R.plurals.reported_by_sources else R.plurals.verified_by_sources, item.sourceCount, item.sourceCount)
         val body = listOfNotNull(title, item.summary(am)?.substringBefore(". ")?.plus("."), sources).joinToString("\n")
 
         val publicVersion = NotificationCompat.Builder(context, NotificationRules.channelFor(item))
             .setSmallIcon(R.drawable.ic_stat_lexet)
-            .setContentTitle(context.getString(R.string.notif_public_title))
+            .setContentTitle(context.getString(if (unconfirmed) R.string.notif_public_title_unconfirmed else R.string.notif_public_title))
             .setContentText(phrase)
             .build()
 

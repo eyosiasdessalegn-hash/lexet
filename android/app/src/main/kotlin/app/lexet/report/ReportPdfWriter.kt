@@ -195,7 +195,7 @@ class ReportPdfWriter(private val context: Context, private val taxonomy: Taxono
         if (r.citations.isNotEmpty()) {
             out += para(s(R.string.pdf_references), pH1, 20f, keep = true)
             for (c in r.citations) {
-                val tier = when (c.tier) { 1 -> s(R.string.tier_official); 2 -> s(R.string.tier_agency); 3 -> s(R.string.tier_press); else -> s(R.string.tier_international) }
+                val tier = when (c.tier) { 1 -> s(R.string.tier_official); 2 -> s(R.string.tier_agency); 3 -> s(R.string.tier_press); 4 -> s(R.string.tier_other); else -> s(R.string.tier_international) }
                 out += para("[${c.number}]  ${c.publisher} ($tier) — ${c.title}\n${c.url}", pSmall, 4f, indent = 6f)
             }
         }

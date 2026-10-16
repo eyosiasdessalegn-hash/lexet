@@ -1,5 +1,13 @@
 package app.lexet.ui.search
 
+import android.content.Intent
+import android.net.Uri
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.material3.AssistChip
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.foundation.layout.size
+import app.lexet.domain.clip.WebScope
+import app.lexet.domain.clip.WebSearch
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ExperimentalLayoutApi
@@ -125,6 +133,7 @@ fun SearchScreen(onOpen: (String) -> Unit) {
                 }
             }
         }
+        if (filter.text.isNotBlank()) WebSearchRow(filter.text)
         val list = results
         when {
             list == null -> {}
@@ -147,6 +156,34 @@ fun SearchScreen(onOpen: (String) -> Unit) {
         ModalBottomSheet(onDismissRequest = { showFilters = false }) {
             FilterSheet(filter, container.taxonomy, labelsAm, onChange = { f -> vm.update { f } },
                 onReset = { vm.update { ArchiveFilter(text = it.text) } })
+        }
+    }
+}
+
+/** "Search the web": opens the user's browser on a Google search scoped to laws, legal sites or LinkedIn. */
+@Composable
+private fun WebSearchRow(text: String) {
+    val context = LocalContext.current
+    val scopes = listOf(
+        WebScope.LAWS_PDF to R.string.web_laws, WebScope.ETHIOPIAN_LEGAL_SITES to R.string.web_et_sites,
+        WebScope.LINKEDIN to R.string.web_linkedin, WebScope.WEB to R.string.web_all,
+    )
+    Column(Modifier.fillMaxWidth().padding(bottom = 6.dp)) {
+        Text(stringResource(R.string.search_web_label), style = MaterialTheme.typography.labelMedium,
+            color = MaterialTheme.colorScheme.onSurfaceVariant, modifier = Modifier.padding(horizontal = 16.dp))
+        LazyRow(contentPadding = PaddingValues(horizontal = 12.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            items(scopes) { (scope, label) ->
+                AssistChip(
+                    onClick = {
+                        runCatching {
+                            context.startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(WebSearch.url(text, scope)))
+                                .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK))
+                        }
+                    },
+                    label = { Text(stringResource(label)) },
+                    leadingIcon = { Icon(Icons.Filled.Search, contentDescription = null, modifier = Modifier.size(16.dp)) },
+                )
+            }
         }
     }
 }

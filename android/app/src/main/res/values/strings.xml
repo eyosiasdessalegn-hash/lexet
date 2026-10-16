@@ -44,7 +44,8 @@
     <string name="tier_agency">News agency</string>
     <string name="tier_international">International</string>
     <string name="tier_official">Official</string>
-    <string name="tier_press">Independent press</string>
+    <string name="tier_press">Established press</string>
+    <string name="tier_other">Other outlet</string>
 
     <!-- Notification channels -->
     <string name="channel_in_force">Now in force</string>
@@ -54,7 +55,7 @@
     <string name="channel_upcoming">Drafts and bills</string>
     <string name="channel_upcoming_desc">Draft proclamations, bills before parliament and policy initiatives</string>
     <string name="channel_digest">Digest</string>
-    <string name="channel_digest_desc">Hourly or daily summary of verified developments</string>
+    <string name="channel_digest_desc">Hourly or daily summary of legal updates</string>
     <string name="channel_reports">Reports</string>
     <string name="channel_reports_desc">Weekly, monthly and yearly compilations when ready</string>
     <string name="channel_sync">Background sync</string>
@@ -72,7 +73,7 @@
     <string name="feed_no_server_title">Can\'t reach the server</string>
     <string name="feed_no_server_body">No Aristophanes feed could be reached at %1$s. Check the address in Settings › Server, and your internet connection.</string>
     <string name="perm_title">Allow notifications</string>
-    <string name="perm_body">Get notified, including on the lock screen, when new verified proclamations, regulations and directives appear. Choose exactly what notifies you in Settings.</string>
+    <string name="perm_body">Get notified, including on the lock screen, when new proclamations, regulations and directives appear. Choose exactly what notifies you in Settings.</string>
     <string name="sync_never">Not synced yet</string>
     <string name="sync_just_now">Updated just now</string>
     <string name="sync_minutes_ago">Updated %1$d min ago</string>
@@ -82,7 +83,7 @@
     <!-- Search and filters -->
     <string name="search_hint">Proclamation, number, title…  e.g. 1427/2018</string>
     <string name="search_empty_title">No results</string>
-    <string name="search_empty_body">Try other words or remove filters. Search treats Amharic spelling variants (ሠ/ሰ, ፀ/ጸ, ሐ/ሀ) as the same.</string>
+    <string name="search_empty_body">Nothing in your archive matches. Use Search the web above to look further, or try other words or remove filters. Search treats Amharic spelling variants (ሠ/ሰ, ፀ/ጸ, ሐ/ሀ) as the same.</string>
     <string name="filter_all">All</string>
     <string name="filter_any_body">Any body</string>
     <string name="filter_bookmarked">Bookmarks</string>
@@ -162,8 +163,11 @@
 
     <!-- Settings -->
     <string name="set_notifications">Notifications</string>
-    <string name="set_notify_verified">Verified Ethiopian developments</string>
-    <string name="set_notify_verified_desc">Only when corroborated by at least three independent sources</string>
+    <string name="set_notify_verified">Ethiopian legal updates</string>
+    <string name="set_notify_verified_desc">Verified ones: corroborated by at least three independent sources</string>
+    <string name="set_notify_unconfirmed">Also unconfirmed updates</string>
+    <string name="set_notify_unconfirmed_desc">New items from any source, before three independent outlets confirm them. They are labelled Unconfirmed.</string>
+    <string name="notif_public_title_unconfirmed">New legal update</string>
     <string name="set_lock_screen">Show details on the lock screen</string>
     <string name="set_lock_screen_desc">When off, the lock screen only says “New verified legal development”</string>
     <string name="set_digest">Delivery</string>
@@ -226,6 +230,10 @@
         <item quantity="one">%d source</item>
         <item quantity="other">%d sources</item>
     </plurals>
+    <plurals name="reported_by_sources">
+        <item quantity="one">Reported by %d source so far — unconfirmed</item>
+        <item quantity="other">Reported by %d sources so far — unconfirmed</item>
+    </plurals>
     <plurals name="verified_by_sources">
         <item quantity="one">Corroborated by %d independent source</item>
         <item quantity="other">Corroborated by %d independent sources</item>
@@ -238,4 +246,20 @@
         <item quantity="one">%d entry</item>
         <item quantity="other">%d entries</item>
     </plurals>
+    <string name="share_label">Save to Aristophanes</string>
+    <string name="clip_dialog_title">Save to your archive</string>
+    <string name="clip_from">From %1$s</string>
+    <string name="clip_title">Title</string>
+    <string name="clip_text">Post text</string>
+    <string name="clip_text_hint">Paste the post\'s text here to make it searchable (optional)</string>
+    <string name="clip_detected">Detected: %1$s</string>
+    <string name="clip_saved_toast">Saved to your archive</string>
+    <string name="clip_saved_badge">Saved by you · %1$s</string>
+    <string name="clip_not_verified">Saved by you from %1$s. Not checked against other sources.</string>
+    <string name="action_remove_clip">Remove from archive</string>
+    <string name="search_web_label">Search the web</string>
+    <string name="web_laws">Laws (PDF)</string>
+    <string name="web_et_sites">Ethiopian legal sites</string>
+    <string name="web_linkedin">LinkedIn posts</string>
+    <string name="web_all">Whole web</string>
 </resources>

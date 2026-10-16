@@ -9,6 +9,8 @@ import app.lexet.data.db.TagEntity
 import app.lexet.data.db.UserStateEntity
 import app.lexet.data.net.ItemDto
 import app.lexet.data.net.LexetApi
+import app.lexet.domain.clip.Clip
+import app.lexet.domain.clip.ClipParser
 import app.lexet.domain.model.LegalItem
 import app.lexet.domain.model.Taxonomy
 import app.lexet.domain.notify.ChangeKind
@@ -54,11 +56,7 @@ class ItemRepository(
         var bootstrap = !state.bootstrapped || db.items().count() == 0
         if (state.epoch != 0L && state.epoch != index.epoch) {
             // The feed was rebuilt from scratch: its version numbers no longer match ours.
-            db.withTransaction {
-                db.fts().deleteAll()
-                db.items().deleteAll()
-                db.notices().deleteAll()
-            }
+            db.withTransaction { deleteFeedItems() }
             since = 0
             bootstrap = true
         }
@@ -71,13 +69,14 @@ class ItemRepository(
             else index.segments.filter { it.to > since }.map { it.file }
         var count = 0
         val events = ArrayList<Pair<LegalItem, ChangeKind>>()
+        val includeUnconfirmed = settings.current().notifications.includeUnconfirmed
         for (file in files) {
             val page = api.feedPage(file)
             val after = since
             db.withTransaction {
                 for (dto in page.items) {
                     if (dto.version <= after) continue
-                    applyItem(dto, bootstrap)?.let { events.add(it) }
+                    applyItem(dto, bootstrap, includeUnconfirmed)?.let { events.add(it) }
                     count++
                 }
             }
@@ -89,7 +88,7 @@ class ItemRepository(
         return SyncOutcome(files.size, count, events, notModified = false)
     }
 
-    private suspend fun applyItem(dto: ItemDto, bootstrap: Boolean): Pair<LegalItem, ChangeKind>? {
+    private suspend fun applyItem(dto: ItemDto, bootstrap: Boolean, includeUnconfirmed: Boolean = false): Pair<LegalItem, ChangeKind>? {
         val existing = db.items().get(dto.id)
         if (dto.deleted) {
             existing?.let { db.fts().delete(it.ftsDocId) }
@@ -107,7 +106,7 @@ class ItemRepository(
         val current = entity.toDomain()
         val doc = SearchIndex.document(current, taxonomy())
         db.fts().put(ItemFtsEntity(entity.ftsDocId, doc.titles, doc.summary, doc.lawId, doc.meta, doc.body))
-        val kind = NotificationRules.detectChange(existing?.toDomain(withSources = false), current, bootstrap)
+        val kind = NotificationRules.detectChange(existing?.toDomain(withSources = false), current, bootstrap, includeUnconfirmed)
         if (kind != null) {
             // A newly verified or advanced item becomes unread again.
             val s = db.user().get(dto.id)
@@ -188,8 +187,59 @@ class ItemRepository(
         db.user().pruneTags()
     }
 
-    /** Wipes the local archive (e.g. after switching servers). Must run off the main thread. */
-    suspend fun resetArchive() = kotlinx.coroutines.withContext(kotlinx.coroutines.Dispatchers.IO) {
-        db.clearAllTables()
+    /** Removes everything that came from the feed, keeping the user's saved posts and their tags. */
+    private suspend fun deleteFeedItems() {
+        db.items().feedDocIds().forEach { db.fts().delete(it) }
+        db.items().deleteAll()
+        db.notices().deleteAll()
+    }
+
+    /** A new feed address means a new archive; the user's saved posts are kept. */
+    suspend fun resetArchive() = db.withTransaction { deleteFeedItems() }
+
+    // ---------------------------------------------------------------- saved posts (shared into the app)
+
+    /** Saves a shared post as a local archive item (searchable, bookmarked). Returns its id. */
+    suspend fun saveClip(clip: Clip, today: LocalDate = LocalDate.now()): String {
+        val slug = clip.platform.lowercase().replace(Regex("[^a-z0-9.]"), "").ifEmpty { "shared" }
+        val id = "${ClipParser.ID_PREFIX}$slug-${java.util.UUID.randomUUID().toString().take(12)}"
+        val now = System.currentTimeMillis()
+        val ec = clip.lawYear?.takeIf { clip.yearIsEthiopian }
+        val gc = clip.lawYear?.takeIf { !clip.yearIsEthiopian }
+        val source = app.lexet.data.net.SourceDto(
+            publisher = clip.platform.uppercase(), name = clip.platform, tier = 4, url = clip.url ?: "",
+            title = clip.title, lang = if (clip.amharic) "am" else "en", counted = false,
+            reason = "saved by you", excerpt = clip.text.take(4000).ifBlank { null })
+        db.withTransaction {
+            val entity = app.lexet.data.db.ItemEntity(
+                id = id, ftsDocId = db.items().nextDocId(), version = 0, jurisdiction = "ET", docType = clip.docType.code,
+                lawId = clip.lawIdText, lawNumber = clip.lawNumber, lawYearGc = gc ?: ec?.let { it + 8 },
+                lawYearEc = ec ?: gc?.let { it - 8 },
+                titleEn = clip.title.takeUnless { clip.amharic }, titleAm = clip.title.takeIf { clip.amharic },
+                summaryEn = clip.text.take(4000).takeUnless { clip.amharic || it.isBlank() },
+                summaryAm = clip.text.take(4000).takeIf { clip.amharic && it.isNotBlank() },
+                issuer = null, initiator = null, status = null, verifiedStatus = null, reportedStatus = null,
+                verification = "unconfirmed", sourceCount = 0, hasOfficialSource = false, topics = ",", amends = null,
+                eventDate = today.toEpochDay(), statusDate = null, firstSeenAt = now, updatedAt = now, relevance = 0.0,
+                sourcesJson = app.lexet.data.net.LexetJson.encodeToString(
+                    kotlinx.serialization.builtins.ListSerializer(app.lexet.data.net.SourceDto.serializer()), listOf(source)),
+            )
+            db.items().upsert(entity)
+            val doc = SearchIndex.document(entity.toDomain(), taxonomy())
+            db.fts().put(ItemFtsEntity(entity.ftsDocId, doc.titles, doc.summary, doc.lawId, doc.meta, doc.body))
+            db.user().upsert(UserStateEntity(id, read = true, bookmarked = true, bookmarkedAt = now))
+        }
+        return id
+    }
+
+    suspend fun deleteClip(id: String) {
+        if (!ClipParser.isClip(id)) return
+        db.withTransaction {
+            db.items().get(id)?.let { db.fts().delete(it.ftsDocId) }
+            db.items().delete(id)
+            db.user().delete(id)
+            db.user().deleteTagsFor(id)
+            db.user().pruneTags()
+        }
     }
 }

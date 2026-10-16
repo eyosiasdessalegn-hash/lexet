@@ -108,11 +108,13 @@ SOURCES: list[SourceDef] = [
         id="chilot", name="Chilot — Ethiopian legal information", publisher="CHILOT", tier=3,
         jurisdiction="ET", lang="mixed", kind="wordpress", interval_min=180,
         config={"base_url": "https://chilot.me"},
+        enabled=False,  # checked 16 Oct 2026: API and feed return 404 (site moved?)
     ),
     SourceDef(
         id="reporter_am", name="ሪፖርተር — The Reporter (Amharic)", publisher="REPORTER", tier=3,
         jurisdiction="ET", lang="am", kind="wordpress", interval_min=30,
         config={"base_url": "https://www.ethiopianreporter.com"}, aliases=["ሪፖርተር"],
+        enabled=False,  # checked 16 Oct 2026: 403 / bot challenge to automated requests
     ),
     SourceDef(
         id="fana_am", name="ፋና — Fana Media Corporation (Amharic)", publisher="FANA", tier=3,
@@ -123,16 +125,19 @@ SOURCES: list[SourceDef] = [
         id="walta", name="Walta Media and Communication", publisher="WALTA", tier=3,
         jurisdiction="ET", lang="mixed", kind="wordpress", interval_min=30,
         config={"base_url": "https://waltainfo.com"}, aliases=["Walta", "ዋልታ"],
+        enabled=False,  # checked 16 Oct 2026: bot challenge (HTTP 202) to automated requests
     ),
     SourceDef(
         id="press_et", name="Ethiopian Press Agency (The Ethiopian Herald, Addis Zemen)", publisher="EPA", tier=3,
         jurisdiction="ET", lang="mixed", kind="wordpress", interval_min=60,
         config={"base_url": "https://press.et"}, aliases=["The Ethiopian Herald", "Addis Zemen", "አዲስ ዘመን"],
+        enabled=False,  # checked 16 Oct 2026: bot challenge instead of the WordPress API
     ),
     SourceDef(
         id="ebr", name="Ethiopian Business Review", publisher="EBR", tier=3,
         jurisdiction="ET", lang="en", kind="wordpress", interval_min=180,
         config={"base_url": "https://ethiopianbusinessreview.net"},
+        enabled=False,  # checked 16 Oct 2026: feed carries spam posts (casino ads); re-enable once clean
     ),
     SourceDef(
         id="bbc_amharic", name="BBC News አማርኛ", publisher="BBC", tier=3,
@@ -143,6 +148,7 @@ SOURCES: list[SourceDef] = [
         id="dw_amharic", name="DW አማርኛ", publisher="DW", tier=3,
         jurisdiction="ET", lang="am", kind="rss", interval_min=60,
         config={"feed_url": "https://rss.dw.com/xml/rss-amh-all"},
+        enabled=False,  # checked 16 Oct 2026: feed URL returns an empty document; find the current one
     ),
     SourceDef(
         id="borkena", name="Borkena", publisher="BORKENA", tier=4,

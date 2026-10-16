@@ -128,6 +128,8 @@ class AppSmokeTest {
         val field = compose.onNode(hasSetTextAction())
         field.performTextInput("መረጃ")              // stored as "የመረጃ ደኅንነት አዋጅ"
         waitForText("የመረጃ ደኅንነት አዋጅ")
+        compose.onNodeWithText("Laws (PDF)").assertExists()          // "Search the web" scopes
+        compose.onNodeWithText("LinkedIn posts").assertExists()
         shot("03-search-amharic")
         field.performTextClearance()
         field.performTextInput("1430/2018")          // Ethiopian-calendar citation of No. 1430/2026
@@ -151,7 +153,8 @@ class AppSmokeTest {
         compose.activityRule.scenario.onActivity { it.onBackPressedDispatcher.onBackPressed() }
         tab("Settings")
         waitForText("Notifications")
-        compose.onNodeWithText("Verified Ethiopian developments").assertExists()
+        compose.onNodeWithText("Ethiopian legal updates").assertExists()
+        compose.onNodeWithText("Also unconfirmed updates").assertExists()
         shot("06-settings")
     }
 

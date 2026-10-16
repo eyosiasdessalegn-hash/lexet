@@ -51,6 +51,8 @@ def names_match(a: frozenset, b: frozenset) -> bool:
     if bool(a & amend_words) != bool(b & amend_words):
         return False
     shared = a & b
+    if len(a) == 1 and a == b:   # one-word titles ("Media Proclamation") match only exactly
+        return True
     if len(shared) < 2:
         return False
     return jaccard(a, b) >= 0.5 or (containment(a, b) >= 0.85 and len(shared) >= 3)

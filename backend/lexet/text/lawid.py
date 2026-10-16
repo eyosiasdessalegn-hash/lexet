@@ -298,10 +298,13 @@ def find_law_names(text: str, lang: str | None = None) -> list[LawName]:
     seen: set[frozenset] = set()
     aligned = len(folded) == len(text)  # folding kept offsets (no numerals/zero-width removed)
 
-    def push(doc, name, start, lng, display=None):
+    def push(doc, name, start, lng, display=None, single_ok=False):
         name = _trim_leading_generic(name.strip()) if lng == "am" else name.strip()
         toks = name_tokens(name)
-        if len(toks) < 2 or toks in seen:
+        # One distinctive word is enough for a capitalised English title ("Investment Proclamation",
+        # "Media Proclamation"); elsewhere two are needed, to avoid matching generic phrases.
+        enough = len(toks) >= 2 or (single_ok and len(toks) == 1 and len(next(iter(toks))) >= 4)
+        if not enough or toks in seen:
             return
         seen.add(toks)
         if display is None:
@@ -316,9 +319,9 @@ def find_law_names(text: str, lang: str | None = None) -> list[LawName]:
         words = m.group("name").split()
         while words and words[0].lower() in _LEADING_JUNK:
             words = words[1:]
-        if len(words) < 3:
+        if len(words) < 2:
             continue
-        push(_doc_from_word(words[-1]), " ".join(words), m.start(), "en")
+        push(_doc_from_word(words[-1]), " ".join(words), m.start(), "en", single_ok=True)
     for m in _NAME_EN_LOWER.finditer(folded):
         subject = m.group("subject").strip()
         kind = m.group("kind")

@@ -162,8 +162,12 @@ interface ItemDao {
     @Query("SELECT COUNT(*) FROM items")
     suspend fun count(): Int
 
-    @Query("DELETE FROM items")
+    /** Everything that came from the feed; the user's own saved posts (id "clip-…") stay. */
+    @Query("DELETE FROM items WHERE id NOT LIKE 'clip-%'")
     suspend fun deleteAll()
+
+    @Query("SELECT ftsDocId FROM items WHERE id NOT LIKE 'clip-%'")
+    suspend fun feedDocIds(): List<Long>
 
     @Query(
         """SELECT i.id, i.jurisdiction, i.docType, i.lawId, i.lawNumber, i.lawYearEc, i.titleEn, i.titleAm,
@@ -181,7 +185,7 @@ interface ItemDao {
     fun observeRows(query: SupportSQLiteQuery): Flow<List<ItemRow>>
 
     @Query(
-        """SELECT * FROM items WHERE jurisdiction = 'ET'
+        """SELECT * FROM items WHERE jurisdiction = 'ET' AND id NOT LIKE 'clip-%'
            AND ((eventDate BETWEEN :startDay AND :endDay) OR (statusDate BETWEEN :startDay AND :endDay))"""
     )
     suspend fun ethiopianInRange(startDay: Long, endDay: Long): List<ItemEntity>

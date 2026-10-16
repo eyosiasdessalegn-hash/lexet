@@ -1,5 +1,8 @@
 package app.lexet.ui.detail
 
+import app.lexet.domain.clip.ClipParser
+import app.lexet.ui.clipPlatform
+import androidx.compose.foundation.layout.PaddingValues
 import android.content.Intent
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -96,11 +99,13 @@ class DetailViewModel(private val c: AppContainer, val id: String) : ViewModel()
     fun addTag(name: String) = viewModelScope.launch { c.repository.addTag(id, name) }
     fun removeTag(tagId: Long) = viewModelScope.launch { c.repository.removeTag(id, tagId) }
     fun setNote(note: String) = viewModelScope.launch { c.repository.setNote(id, note) }
+    fun deleteClip(done: () -> Unit) = viewModelScope.launch { c.repository.deleteClip(id); done() }
 }
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class)
 @Composable
 fun DetailScreen(id: String, onBack: () -> Unit) {
+    val isClip = ClipParser.isClip(id)
     val container = appContainer()
     val vm: DetailViewModel = viewModel(key = "detail-$id") { DetailViewModel(container, id) }
     val item by vm.item.collectAsStateWithLifecycle()
@@ -141,7 +146,8 @@ fun DetailScreen(id: String, onBack: () -> Unit) {
         Column(Modifier.fillMaxSize().verticalScroll(rememberScrollState()).padding(horizontal = 16.dp)) {
             Spacer(Modifier.height(4.dp))
             Row(verticalAlignment = Alignment.CenterVertically) {
-                if (it.jurisdiction == Jurisdiction.INTL) Pill(stringResource(R.string.label_international), LocalLexColors.current.upcoming)
+                if (isClip) Pill(clipPlatform(it.id), LocalLexColors.current.official)
+                else if (it.jurisdiction == Jurisdiction.INTL) Pill(stringResource(R.string.label_international), LocalLexColors.current.upcoming)
                 else StatusPill(it.verifiedStatus ?: it.status, tax, am)
                 Spacer(Modifier.width(8.dp))
                 Text(tax.docLabel(it.docType.code, am), style = MaterialTheme.typography.labelMedium,
@@ -156,12 +162,18 @@ fun DetailScreen(id: String, onBack: () -> Unit) {
             if (secondary != null && secondary != it.title(settings.amharicFirst)) {
                 Text(secondary, style = MaterialTheme.typography.titleMedium, color = MaterialTheme.colorScheme.onSurfaceVariant,
                     modifier = Modifier.padding(top = 2.dp))
-            } else if (it.jurisdiction == Jurisdiction.ET && (it.titleAm == null || it.titleEn == null)) {
+            } else if (!isClip && it.jurisdiction == Jurisdiction.ET && (it.titleAm == null || it.titleEn == null)) {
                 Text(stringResource(if (it.titleAm == null) R.string.no_amharic_title else R.string.no_english_title),
                     style = MaterialTheme.typography.bodySmall, color = MaterialTheme.colorScheme.onSurfaceVariant)
             }
             Spacer(Modifier.height(10.dp))
-            if (it.jurisdiction == Jurisdiction.ET) VerificationBadge(it.verification, it.sourceCount, it.hasOfficialSource)
+            if (isClip) {
+                Text(stringResource(R.string.clip_not_verified, clipPlatform(it.id)), style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant)
+                TextButton(onClick = { vm.deleteClip(onBack) }, contentPadding = PaddingValues(0.dp)) {
+                    Text(stringResource(R.string.action_remove_clip))
+                }
+            } else if (it.jurisdiction == Jurisdiction.ET) VerificationBadge(it.verification, it.sourceCount, it.hasOfficialSource)
 
             if (it.reportedStatus != null && it.reportedStatus.rankOrMinus() > it.verifiedStatus.rankOrMinus() && it.verifiedStatus != null) {
                 OutlinedCard(Modifier.fillMaxWidth().padding(top = 10.dp)) {
@@ -240,7 +252,7 @@ private fun Fact(label: String, value: String?) {
 private fun SourceRow(s: SourceRef, am: Boolean) {
     val uri = LocalUriHandler.current
     val tierLabel = stringResource(when (s.tier) {
-        1 -> R.string.tier_official; 2 -> R.string.tier_agency; 3 -> R.string.tier_press; else -> R.string.tier_international
+        1 -> R.string.tier_official; 2 -> R.string.tier_agency; 3 -> R.string.tier_press; 4 -> R.string.tier_other; else -> R.string.tier_international
     })
     var expanded by remember { mutableStateOf(false) }
     Column(Modifier.fillMaxWidth().clickable { expanded = !expanded }.padding(vertical = 8.dp)) {

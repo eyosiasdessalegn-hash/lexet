@@ -42,7 +42,8 @@
     <string name="tier_agency">ይፋዊ የዜና ወኪል</string>
     <string name="tier_international">ዓለም አቀፍ</string>
     <string name="tier_official">ይፋዊ</string>
-    <string name="tier_press">ገለልተኛ ፕሬስ</string>
+    <string name="tier_press">ታዋቂ ፕሬስ</string>
+    <string name="tier_other">ሌላ ምንጭ</string>
 
     <!-- Notification channels -->
     <string name="channel_in_force">በሥራ ላይ የዋሉ ሕጎች</string>
@@ -52,7 +53,7 @@
     <string name="channel_upcoming">ረቂቆችና የቀረቡ ሕጎች</string>
     <string name="channel_upcoming_desc">ረቂቅ አዋጆች፣ ለምክር ቤቱ የቀረቡ ሕጎችና የፖሊሲ ጅምሮች</string>
     <string name="channel_digest">ማጠቃለያ</string>
-    <string name="channel_digest_desc">የተረጋገጡ ለውጦች በሰዓት ወይም በቀን ማጠቃለያ</string>
+    <string name="channel_digest_desc">የሕግ መረጃዎች በሰዓት ወይም በቀን ማጠቃለያ</string>
     <string name="channel_reports">ሪፖርቶች</string>
     <string name="channel_reports_desc">ሳምንታዊ፣ ወርሃዊና ዓመታዊ ማጠናከሪያዎች ሲዘጋጁ</string>
     <string name="channel_sync">የዳራ ማመሳሰል</string>
@@ -70,7 +71,7 @@
     <string name="feed_no_server_title">ከአገልጋዩ ጋር መገናኘት አልተቻለም</string>
     <string name="feed_no_server_body">በ%1$s የAristophanes ምንጭ ማግኘት አልተቻለም። በቅንብሮች › አገልጋይ ያለውን አድራሻ እና የኢንተርኔት ግንኙነትዎን ያረጋግጡ።</string>
     <string name="perm_title">ማሳወቂያዎችን ይፍቀዱ</string>
-    <string name="perm_body">አዳዲስ የተረጋገጡ አዋጆች፣ ደንቦችና መመሪያዎች ሲወጡ በመቆለፊያ ማያ ገጹ ላይም ጭምር እንዲያውቁ። የትኞቹ እንደሚያሳውቁ በቅንብሮች ውስጥ ይምረጡ።</string>
+    <string name="perm_body">አዳዲስ አዋጆች፣ ደንቦችና መመሪያዎች ሲወጡ በመቆለፊያ ማያ ገጹ ላይም ጭምር እንዲያውቁ። የትኞቹ እንደሚያሳውቁ በቅንብሮች ውስጥ ይምረጡ።</string>
     <string name="sync_never">ገና አልተመሳሰለም</string>
     <string name="sync_just_now">አሁን ተዘምኗል</string>
     <string name="sync_minutes_ago">ከ%1$d ደቂቃ በፊት ተዘምኗል</string>
@@ -80,7 +81,7 @@
     <!-- Search and filters -->
     <string name="search_hint">አዋጅ፣ ቁጥር፣ ርዕስ…  ለምሳሌ፦ 1427/2018</string>
     <string name="search_empty_title">ውጤት የለም</string>
-    <string name="search_empty_body">ሌላ ቃል ይሞክሩ ወይም ማጣሪያዎችን ያስወግዱ። ፍለጋው የፊደል ልዩነቶችን (ሠ/ሰ፣ ፀ/ጸ፣ ሐ/ሀ) እንደ አንድ ይቆጥራል።</string>
+    <string name="search_empty_body">በማህደርዎ ውስጥ የሚዛመድ የለም። ለተጨማሪ ከላይ ያለውን «በድር ይፈልጉ» ይጠቀሙ፤ ወይም ሌላ ቃል ይሞክሩ ወይም ማጣሪያዎችን ያስወግዱ። ፍለጋው የፊደል ልዩነቶችን (ሠ/ሰ፣ ፀ/ጸ፣ ሐ/ሀ) እንደ አንድ ይቆጥራል።</string>
     <string name="filter_all">ሁሉም</string>
     <string name="filter_any_body">ማንኛውም አካል</string>
     <string name="filter_bookmarked">ዕልባቶች</string>
@@ -160,8 +161,11 @@
 
     <!-- Settings -->
     <string name="set_notifications">ማሳወቂያዎች</string>
-    <string name="set_notify_verified">የተረጋገጡ የኢትዮጵያ ሕግ ለውጦች</string>
-    <string name="set_notify_verified_desc">ቢያንስ በሦስት ገለልተኛ ምንጮች ሲረጋገጡ ብቻ</string>
+    <string name="set_notify_verified">የኢትዮጵያ የሕግ መረጃዎች</string>
+    <string name="set_notify_verified_desc">የተረጋገጡት፦ ቢያንስ በሦስት ገለልተኛ ምንጮች የተደገፉ</string>
+    <string name="set_notify_unconfirmed">ያልተረጋገጡትንም</string>
+    <string name="set_notify_unconfirmed_desc">ሦስት ገለልተኛ ምንጮች ከማረጋገጣቸው በፊት ከማንኛውም ምንጭ የሚመጡ አዳዲስ መረጃዎች። «ያልተረጋገጠ» ተብለው ይታያሉ።</string>
+    <string name="notif_public_title_unconfirmed">አዲስ የሕግ መረጃ</string>
     <string name="set_lock_screen">በመቆለፊያ ማያ ገጹ ላይ ዝርዝሩን አሳይ</string>
     <string name="set_lock_screen_desc">ሲጠፋ የመቆለፊያ ማያ ገጹ «አዲስ የተረጋገጠ የሕግ ለውጥ» ብቻ ያሳያል</string>
     <string name="set_digest">አላላክ</string>
@@ -224,6 +228,10 @@
         <item quantity="one">%d ምንጭ</item>
         <item quantity="other">%d ምንጮች</item>
     </plurals>
+    <plurals name="reported_by_sources">
+        <item quantity="one">እስካሁን በ%d ምንጭ የተዘገበ — ያልተረጋገጠ</item>
+        <item quantity="other">እስካሁን በ%d ምንጮች የተዘገበ — ያልተረጋገጠ</item>
+    </plurals>
     <plurals name="verified_by_sources">
         <item quantity="one">በ%d ገለልተኛ ምንጭ የተረጋገጠ</item>
         <item quantity="other">በ%d ገለልተኛ ምንጮች የተረጋገጠ</item>
@@ -236,4 +244,20 @@
         <item quantity="one">%d ሰነድ</item>
         <item quantity="other">%d ሰነዶች</item>
     </plurals>
+    <string name="share_label">ወደ Aristophanes አስቀምጥ</string>
+    <string name="clip_dialog_title">ወደ ማህደርዎ ያስቀምጡ</string>
+    <string name="clip_from">ከ%1$s</string>
+    <string name="clip_title">ርዕስ</string>
+    <string name="clip_text">የልጥፉ ጽሑፍ</string>
+    <string name="clip_text_hint">እንዲፈለግ የልጥፉን ጽሑፍ እዚህ ይለጥፉ (አማራጭ)</string>
+    <string name="clip_detected">የተገኘ፦ %1$s</string>
+    <string name="clip_saved_toast">ወደ ማህደርዎ ተቀምጧል</string>
+    <string name="clip_saved_badge">እርስዎ ያስቀመጡት · %1$s</string>
+    <string name="clip_not_verified">እርስዎ ከ%1$s ያስቀመጡት። ከሌሎች ምንጮች ጋር አልተገናዘበም።</string>
+    <string name="action_remove_clip">ከማህደሩ አስወግድ</string>
+    <string name="search_web_label">በድር ይፈልጉ</string>
+    <string name="web_laws">ሕጎች (PDF)</string>
+    <string name="web_et_sites">የኢትዮጵያ የሕግ ድረ-ገጾች</string>
+    <string name="web_linkedin">የLinkedIn ልጥፎች</string>
+    <string name="web_all">መላው ድር</string>
 </resources>

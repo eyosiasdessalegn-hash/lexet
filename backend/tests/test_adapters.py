@@ -200,3 +200,74 @@ def test_pipeline_crawl_records_robots_and_cursor(pipeline):
         assert s.get(Source, "hopr_laws").robots_state == "disallowed"
         assert s.query(Observation).count() == 1
     assert report.touched_items == 1
+
+
+# ------------------------------------------------------------------ aggregators
+
+SRC_AGG = SourceDef(id="t_agg", name="Agg", publisher="AGG", tier=4, jurisdiction="ET", lang="mixed", kind="gdelt")
+
+
+@respx.mock
+def test_gdelt_articles_keep_their_own_outlet_and_skip_blocked_pages(settings):
+    from lexet.sources.adapters import GdeltAdapter
+    respx.get("https://api.gdeltproject.org/robots.txt").mock(return_value=httpx.Response(404))
+    respx.get(url__startswith="https://api.gdeltproject.org/api/v2/doc/doc").mock(return_value=httpx.Response(200, json={
+        "articles": [
+            {"url": "https://www.thereporterethiopia.com/t-tax", "title": "Parliament approves excise tax proclamation",
+             "seendate": "20261016T081500Z", "domain": "thereporterethiopia.com", "language": "English"},
+            {"url": "https://ethiotimes.example/x", "title": "Cabinet sends draft media law to parliament",
+             "seendate": "20261016T090000Z", "domain": "ethiotimes.example", "language": "English"},
+            {"url": "https://ethiotimes.example/sport", "title": "Runner wins marathon",
+             "seendate": "20261016T090000Z", "domain": "ethiotimes.example", "language": "English"},
+        ]}))
+    respx.get("https://www.thereporterethiopia.com/robots.txt").mock(return_value=httpx.Response(200, text=ALLOW_ALL))
+    respx.get("https://www.thereporterethiopia.com/t-tax").mock(return_value=httpx.Response(
+        200, headers={"content-type": "text/html"},
+        text="<html><body><article><h1>Parliament approves excise tax proclamation</h1>"
+             "<p>The House approved the Excise Tax (Amendment) Proclamation No. 1445/2026 on Tuesday.</p></article></body></html>"))
+    respx.get("https://ethiotimes.example/robots.txt").mock(return_value=httpx.Response(200, text="User-agent: *\nDisallow: /\n"))
+    out = asyncio.run(collect(GdeltAdapter("Ethiopia (proclamation OR law)"), ctx_for(settings, SRC_AGG)))
+    assert [(o.publisher, o.tier) for o in out] == [("REPORTER", 3), ("ethiotimes.example", 4)]
+    assert "1445/2026" in out[0].text                       # opened, robots permitting
+    assert out[1].text == out[1].title                       # its site forbids crawlers: headline only
+    assert out[0].published_at == dt.datetime(2026, 10, 16, 8, 15)
+
+
+@respx.mock
+def test_google_news_items_take_publisher_from_source_element(settings):
+    rss = """<?xml version="1.0"?><rss version="2.0"><channel><title>q</title>
+      <item><title>House ratifies loan proclamation - Addis Standard</title><link>https://news.google.com/rss/articles/AAA</link>
+        <pubDate>Thu, 16 Oct 2026 07:00:00 GMT</pubDate><description>House ratifies loan proclamation</description>
+        <source url="https://addisstandard.com">Addis Standard</source></item>
+      <item><title>New directive on fuel prices - Shega</title><link>https://news.google.com/rss/articles/BBB</link>
+        <pubDate>Thu, 16 Oct 2026 08:00:00 GMT</pubDate><description>New directive on fuel prices</description>
+        <source url="https://shega.co">Shega</source></item>
+    </channel></rss>"""
+    respx.get("https://news.example/robots.txt").mock(return_value=httpx.Response(404))
+    respx.get("https://news.example/rss").mock(return_value=httpx.Response(200, text=rss,
+                                                                           headers={"content-type": "application/rss+xml"}))
+    out = asyncio.run(collect(RssAdapter("https://news.example/rss", per_item_publisher=True), ctx_for(settings, SRC_AGG)))
+    assert [(o.publisher, o.tier) for o in out] == [("ADDIS_STANDARD", 3), ("shega.co", 4)]
+
+
+def test_aggregated_outlets_count_as_independent_publishers(pipeline):
+    from conftest import day, feed
+    from lexet.sources.base import RawObservation
+    feed(pipeline, [
+        ("ena_en", RawObservation(url="https://www.ena.et/web/eng/w/t-media", title="Council of Ministers approves draft Media Proclamation",
+                                  text="The Council of Ministers approved the draft Media Proclamation and sent it to parliament.",
+                                  published_at=day(2026, 10, 1))),
+        ("gdelt", RawObservation(url="https://ethiotimes.example/media-law", title="Cabinet okays draft media proclamation",
+                                 text="A draft Media Proclamation approved by the cabinet goes to lawmakers, critics say it limits press.",
+                                 published_at=day(2026, 10, 2), publisher="ethiotimes.example", tier=4)),
+        ("gnews_en", RawObservation(url="https://news.google.com/rss/articles/CCC", title="Ethiopia drafts new media proclamation - Shega",
+                                    text="Lawmakers will debate the new Media Proclamation drafted by the government, sources told Shega.",
+                                    published_at=day(2026, 10, 2), publisher="shega.co", tier=4)),
+    ])
+    from sqlalchemy import select
+    from lexet.models import Item
+    with pipeline.sf() as s:
+        (item,) = s.scalars(select(Item).where(Item.deleted.is_(False))).all()
+        ev = {e["publisher"]: e for e in json.loads(item.verification_json)["evidence"]}
+    assert set(ev) == {"ENA", "ethiotimes.example", "shega.co"}
+    assert item.independent_sources == 3 and item.verification == "verified"   # ENA anchors; two other outlets corroborate

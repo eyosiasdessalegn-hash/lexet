@@ -149,6 +149,9 @@ class NotificationRulesTest {
         assertEquals(ChangeKind.NEW_VERIFIED, NotificationRules.detectChange(null, v, bootstrap = false))
         assertEquals(ChangeKind.NEW_VERIFIED, NotificationRules.detectChange(unverified, v, false))
         assertNull(NotificationRules.detectChange(null, unverified, false))
+        assertEquals(ChangeKind.NEW_UNCONFIRMED, NotificationRules.detectChange(null, unverified, false, includeUnconfirmed = true))
+        assertNull(NotificationRules.detectChange(unverified, unverified.copy(titleEn = "Edited"), false, includeUnconfirmed = true))
+        assertEquals(ChangeKind.NEW_VERIFIED, NotificationRules.detectChange(unverified, v, false, includeUnconfirmed = true))
         assertNull(NotificationRules.detectChange(null, v.copy(jurisdiction = Jurisdiction.INTL), false))
         assertNull(NotificationRules.detectChange(null, v, bootstrap = true))
         assertNull(NotificationRules.detectChange(v, v.copy(titleEn = "Edited"), false))
@@ -283,5 +286,36 @@ class ReportTest {
         assertEquals(listOf(1), r.sections[1].entries[0].citations)       // shared citation reused
         assertEquals(2, r.citations.size)
         assertEquals(mapOf("new" to 2, "status_changes" to 1, "verified" to 3, "unconfirmed" to 0), r.totals)
+    }
+}
+
+class ClipTests {
+    @org.junit.Test fun linkedInShareWithLawNumber() {
+        val c = app.lexet.domain.clip.ClipParser.parse(
+            "Parliament approved the Digital Commerce Proclamation No. 1431/2026 today. A big step for e-commerce.\nhttps://www.linkedin.com/posts/abebe_digital-activity-123?utm_source=share",
+            null)
+        kotlin.test.assertEquals("LinkedIn", c.platform)
+        kotlin.test.assertEquals("https://www.linkedin.com/posts/abebe_digital-activity-123?utm_source=share", c.url)
+        kotlin.test.assertEquals("Proclamation No. 1431/2026", c.lawIdText)
+        kotlin.test.assertEquals(false, c.yearIsEthiopian)
+        kotlin.test.assertEquals("Parliament approved the Digital Commerce Proclamation No. 1431/2026 today.", c.title)
+    }
+
+    @org.junit.Test fun amharicPostAndBareLink() {
+        val am = app.lexet.domain.clip.ClipParser.parse("የመረጃ ደኅንነት አዋጅ ቁጥር 1450/2018 ጸደቀ https://t.me/ethiolaw/77", null)
+        kotlin.test.assertEquals("Telegram", am.platform)
+        kotlin.test.assertEquals(app.lexet.domain.model.DocType.PROCLAMATION, am.docType)
+        kotlin.test.assertEquals(1450, am.lawNumber)
+        kotlin.test.assertEquals(true, am.yearIsEthiopian)
+        kotlin.test.assertEquals(true, am.amharic)
+        val bare = app.lexet.domain.clip.ClipParser.parse("https://lnkd.in/abc", "")
+        kotlin.test.assertEquals("LinkedIn post", bare.title)
+        kotlin.test.assertEquals(null, bare.lawNumber)
+    }
+
+    @org.junit.Test fun webSearchScopes() {
+        val u = app.lexet.domain.clip.WebSearch.url("investment proclamation", app.lexet.domain.clip.WebScope.LINKEDIN)
+        kotlin.test.assertTrue(u.startsWith("https://www.google.com/search?q=investment+proclamation+%28site%3Alinkedin.com%2Fposts"))
+        kotlin.test.assertTrue("site:chilot.me" in app.lexet.domain.clip.WebSearch.query("x", app.lexet.domain.clip.WebScope.ETHIOPIAN_LEGAL_SITES))
     }
 }

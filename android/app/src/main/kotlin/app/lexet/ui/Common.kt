@@ -1,5 +1,6 @@
 package app.lexet.ui
 
+import app.lexet.domain.clip.ClipParser
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -158,7 +159,10 @@ fun ItemCard(
                         .semantics { contentDescription = "unread" })
                     Spacer(Modifier.width(6.dp))
                 }
-                if (item.jurisdiction == Jurisdiction.INTL) {
+                if (ClipParser.isClip(item.id)) {
+                    Pill(clipPlatform(item.id), LocalLexColors.current.official)
+                    Spacer(Modifier.width(6.dp))
+                } else if (item.jurisdiction == Jurisdiction.INTL) {
                     Pill(stringResource(R.string.label_international), LocalLexColors.current.upcoming)
                     Spacer(Modifier.width(6.dp))
                 } else {
@@ -187,7 +191,10 @@ fun ItemCard(
                         maxLines = 2, overflow = TextOverflow.Ellipsis)
                 }
                 Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(top = 4.dp)) {
-                    if (item.jurisdiction == Jurisdiction.ET) {
+                    if (ClipParser.isClip(item.id)) {
+                        Text(stringResource(R.string.clip_saved_badge, clipPlatform(item.id)), style = MaterialTheme.typography.labelSmall,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant)
+                    } else if (item.jurisdiction == Jurisdiction.ET) {
                         VerificationBadge(item.verification, item.sourceCount, item.hasOfficialSource, compact = true)
                         Spacer(Modifier.width(8.dp))
                     }
@@ -199,6 +206,16 @@ fun ItemCard(
             }
         }
     }
+}
+
+/** Platform a saved post came from, read from its id ("clip-linkedin-…"). */
+fun clipPlatform(id: String): String = when (val slug = id.removePrefix(ClipParser.ID_PREFIX).substringBefore('-')) {
+    "linkedin" -> "LinkedIn"
+    "telegram" -> "Telegram"
+    "facebook" -> "Facebook"
+    "x" -> "X"
+    "sharedtext", "" -> "Shared"
+    else -> slug
 }
 
 @Composable

@@ -125,6 +125,11 @@ fun SettingsScreen(onSources: () -> Unit) {
 
             SectionTitle(stringResource(R.string.set_notifications))
             SwitchRow(stringResource(R.string.set_notify_verified), stringResource(R.string.set_notify_verified_desc), n.enabled) { v -> vm.filters { it.copy(enabled = v) } }
+            if (n.enabled) {
+                SwitchRow(stringResource(R.string.set_notify_unconfirmed), stringResource(R.string.set_notify_unconfirmed_desc), n.includeUnconfirmed) { v ->
+                    vm.filters { it.copy(includeUnconfirmed = v) }
+                }
+            }
             SwitchRow(stringResource(R.string.set_lock_screen), stringResource(R.string.set_lock_screen_desc), n.showOnLockScreen) { v -> vm.filters { it.copy(showOnLockScreen = v) } }
 
             Label(stringResource(R.string.set_digest))
@@ -352,7 +357,7 @@ fun SourcesScreen(onBack: () -> Unit) {
             items(sources.orEmpty()) { src ->
                 Column(Modifier.fillMaxWidth().padding(vertical = 8.dp)) {
                     Text(src.name, style = MaterialTheme.typography.titleSmall)
-                    val tier = stringResource(when (src.tier) { 1 -> R.string.tier_official; 2 -> R.string.tier_agency; 3 -> R.string.tier_press; else -> R.string.tier_international })
+                    val tier = stringResource(when (src.tier) { 1 -> R.string.tier_official; 2 -> R.string.tier_agency; 3 -> R.string.tier_press; 4 -> R.string.tier_other; else -> R.string.tier_international })
                     val robots = when (src.robotsState) {
                         "allowed" -> stringResource(R.string.robots_allowed)
                         "disallowed" -> stringResource(R.string.robots_disallowed)
