@@ -60,8 +60,9 @@ object NotificationRules {
         if (bootstrap) return null
         if (current.jurisdiction != Jurisdiction.ET) return null
         if (current.verification != Verification.VERIFIED) {
-            // Optional: a brand-new item that is not (yet) corroborated by three sources.
-            return if (includeUnconfirmed && previous == null) ChangeKind.NEW_UNCONFIRMED else null
+            // Optional: a brand-new instrument not (yet) corroborated by three sources. General legal
+            // news that names no law is shown in the feed but does not ring.
+            return if (includeUnconfirmed && previous == null && current.docType != DocType.OTHER) ChangeKind.NEW_UNCONFIRMED else null
         }
         if (previous == null || previous.verification != Verification.VERIFIED) return ChangeKind.NEW_VERIFIED
         if (current.verifiedStatus.rankOrMinus() > previous.verifiedStatus.rankOrMinus()) return ChangeKind.STATUS_ADVANCED

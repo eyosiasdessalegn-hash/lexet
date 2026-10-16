@@ -237,3 +237,19 @@ def test_explicit_ethiopian_year_beats_converted_one(pipeline):
     it = et_items(pipeline)[0]
     assert (it.law_year_gc, it.law_year_ec) == (2026, 2018)
     assert it.title_am == "የገጠር መንገዶች ብድር ማጽደቂያ አዋጅ"
+
+
+def test_legal_news_without_a_named_law_is_kept_as_unconfirmed_item(pipeline):
+    feed(pipeline, [
+        ("borkena", RawObservation(url="https://borkena.com/t-court", title="Federal court rules on land lease policy dispute",
+                                   text="The Federal Supreme Court ruled on Monday in a dispute over the land lease policy in Addis Ababa.",
+                                   published_at=day(2026, 10, 14))),
+        ("borkena", RawObservation(url="https://borkena.com/t-sport", title="Athletes return from Tokyo",
+                                   text="Ethiopian athletes returned home on Monday.", published_at=day(2026, 10, 14))),
+    ])
+    (item,) = et_items(pipeline)
+    assert item.doc_type == "other" and item.verification == "unconfirmed" and item.independent_sources == 1
+    assert item.title_en == "Federal court rules on land lease policy dispute"
+    assert "Supreme Court" in item.summary_en
+    ev = json.loads(item.verification_json)["evidence"]
+    assert ev[0]["publisher"] == "BORKENA" and "names no specific law" in ev[0]["reason"]

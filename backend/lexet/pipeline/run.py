@@ -18,7 +18,7 @@ from ..models import FetchCache, Item, Observation, Signal, Source, current_vers
 from ..push import Pusher
 from ..sources import catalog
 from ..sources.adapters import build_adapter
-from ..sources.base import AdapterContext, RawObservation, SourceDef
+from ..sources.base import AdapterContext, RawObservation, SourceDef, looks_legal
 from ..sources.html_extract import looks_like_gazette
 from ..sources.http import PoliteFetcher, RobotsDisallowed
 from ..text import classify, ethiopic, similarity
@@ -204,13 +204,28 @@ class Pipeline:
                                is_primary_document=obs.is_primary_document, gazette=obs.gazette,
                                status_hint=obs.status_hint, doc_type_hint=extra.get("doc_type_hint"),
                                issuer_hint=extra.get("issuer_hint"))
+                found = False
                 for sig in extract_signals(view):
                     item = cluster.attach(session, sig, obs.id, obs.when)
                     session.flush()
                     touched.add(item.id)
+                    found = True
+                if not found and self.settings.keep_legal_news and looks_legal(obs.title):
+                    # Legal news that names no instrument (yet): kept as its own single-source item.
+                    touched.add(self._news_item(session, obs).id)
             obs.processed = True
         session.flush()
         return touched
+
+    def _news_item(self, session, obs: Observation) -> Item:
+        it = Item(jurisdiction="ET", doc_type="other", title_en=obs.title if obs.lang != "am" else None,
+                  title_am=obs.title if obs.lang == "am" else None, verification="unconfirmed",
+                  version=next_version(session))
+        session.add(it)
+        session.flush()
+        session.add(Signal(observation_id=obs.id, item_id=it.id, doc_type="news"))
+        session.flush()
+        return it
 
     def _intl_item(self, session, obs: Observation) -> Item:
         it = Item(jurisdiction="INTL", doc_type="other", title_en=obs.title if obs.lang == "en" else None,
@@ -241,6 +256,8 @@ class Pipeline:
             item.deleted = True
         elif item.jurisdiction == "INTL":
             self._rebuild_intl(item, signals)
+        elif all(s.doc_type == "news" for s in signals):
+            self._rebuild_news(item, signals)
         else:
             self._rebuild_et(item, signals)
         events: list[tuple[str, str]] = []
@@ -271,6 +288,27 @@ class Pipeline:
             "observation_id": o.id, "publisher": o.publisher, "tier": o.tier, "url": o.url, "title": o.title,
             "published_at": o.when.replace(microsecond=0).isoformat() + "Z", "status": None, "primary_document": False, "gazette": False,
             "counted": True, "reason": "single international source"}]}, ensure_ascii=False)
+
+    def _rebuild_news(self, item: Item, signals: list[Signal]):
+        """A single report of legal news that names no instrument: shown as reported, unconfirmed."""
+        o = signals[0].observation
+        lim = self.settings.official_excerpt_chars if o.tier == 1 else self.settings.news_excerpt_chars
+        excerpt = re.sub(r"\s+", " ", o.text or "").strip()
+        summary = (excerpt[:lim].rsplit(" ", 1)[0] + "…") if len(excerpt) > lim else excerpt or None
+        if o.lang == "am":
+            item.title_am, item.summary_am = o.title, summary
+        else:
+            item.title_en, item.summary_en = o.title, summary
+        item.event_date = o.when.date()
+        item.topics_json = json.dumps(classify.detect_topics(f"{o.title} {(o.text or '')[:3000]}"))
+        item.independent_sources = 1
+        item.has_official_source = o.tier == 1
+        item.verification = "unconfirmed"
+        item.verification_json = json.dumps({"evidence": [{
+            "observation_id": o.id, "publisher": o.publisher, "tier": o.tier, "url": o.url, "title": o.title,
+            "published_at": o.when.replace(microsecond=0).isoformat() + "Z", "status": None,
+            "primary_document": o.is_primary_document, "gazette": o.gazette,
+            "counted": True, "reason": "single report; names no specific law"}]}, ensure_ascii=False)
 
     def _rebuild_et(self, item: Item, signals: list[Signal]):
         obs = {s.observation_id: s.observation for s in signals}

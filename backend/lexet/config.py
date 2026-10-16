@@ -33,6 +33,9 @@ class Settings:
     intl_window_days: int = 30
     intl_min_relevance: float = 2.0
 
+    # Keep Ethiopian legal news that names no specific law as single-source items (shown as unconfirmed)
+    keep_legal_news: bool = True
+
     # Redistribution limits for source text sent to the app
     news_excerpt_chars: int = 280
     official_excerpt_chars: int = 20_000
@@ -64,6 +67,7 @@ class Settings:
         s.official_self_publication_verifies = _bool(
             "LEXET_OFFICIAL_SELF_PUBLICATION_VERIFIES", s.official_self_publication_verifies)
         s.intl_ratio = int(os.environ.get("LEXET_INTL_RATIO", s.intl_ratio))
+        s.keep_legal_news = _bool("LEXET_KEEP_LEGAL_NEWS", s.keep_legal_news)
         s.admin_token = os.environ.get("LEXET_ADMIN_TOKEN") or None
         s.fcm_project_id = os.environ.get("LEXET_FCM_PROJECT_ID") or None
         s.fcm_credentials_file = os.environ.get("LEXET_FCM_CREDENTIALS") or None

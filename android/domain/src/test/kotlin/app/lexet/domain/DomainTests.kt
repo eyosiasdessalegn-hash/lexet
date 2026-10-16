@@ -150,6 +150,7 @@ class NotificationRulesTest {
         assertEquals(ChangeKind.NEW_VERIFIED, NotificationRules.detectChange(unverified, v, false))
         assertNull(NotificationRules.detectChange(null, unverified, false))
         assertEquals(ChangeKind.NEW_UNCONFIRMED, NotificationRules.detectChange(null, unverified, false, includeUnconfirmed = true))
+        assertNull(NotificationRules.detectChange(null, unverified.copy(docType = DocType.OTHER), false, includeUnconfirmed = true))
         assertNull(NotificationRules.detectChange(unverified, unverified.copy(titleEn = "Edited"), false, includeUnconfirmed = true))
         assertEquals(ChangeKind.NEW_VERIFIED, NotificationRules.detectChange(unverified, v, false, includeUnconfirmed = true))
         assertNull(NotificationRules.detectChange(null, v.copy(jurisdiction = Jurisdiction.INTL), false))
